@@ -82,16 +82,9 @@ public class ZLPhotoPreviewSheet: UIView {
     ///  - params1: images for asset.
     ///  - params2: selected assets
     ///  - params3: is full image
-    @objc public var selectImageBlock: ( ([UIImage], [PHAsset], Bool) -> Void )?
+    @objc public var selectImageBlockOo: ( ([UIImage], [PHAsset], Bool) -> Void )?
     
-    /// Callback for photos that failed to parse
-    /// block params
-    ///  - params1: failed assets.
-    ///  - params2: index for asset
-    @objc public var selectImageRequestErrorBlock: ( ([PHAsset], [Int]) -> Void )?
-    
-    @objc public var cancelBlock: ( () -> Void )?
-    
+
     deinit {
         zl_debugPrint("ZLPhotoPreviewSheet deinit")
     }
@@ -355,9 +348,7 @@ public class ZLPhotoPreviewSheet: UIView {
     }
     
     @objc func tapAction(_ tap: UITapGestureRecognizer) {
-        self.hide {
-            self.cancelBlock?()
-        }
+        self.hide {}
     }
     
     @objc func cameraBtnClick() {
@@ -400,9 +391,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     @objc func cancelBtnClick() {
         guard !self.arrSelectedModels.isEmpty else {
-            self.hide {
-                self.cancelBlock?()
-            }
+            self.hide { }
             return
         }
         self.requestSelectPhoto()
@@ -478,7 +467,7 @@ public class ZLPhotoPreviewSheet: UIView {
     
     func requestSelectPhoto(viewController: UIViewController? = nil) {
         guard !self.arrSelectedModels.isEmpty else {
-            self.selectImageBlock?([], [], self.isSelectOriginal)
+            self.selectImageBlockOo?([], [], self.isSelectOriginal)
             self.hide()
             viewController?.dismiss(animated: true, completion: nil)
             return
@@ -499,24 +488,16 @@ public class ZLPhotoPreviewSheet: UIView {
         }
         
         let callback = { [weak self] (sucImages: [UIImage], sucAssets: [PHAsset], errorAssets: [PHAsset], errorIndexs: [Int]) in
-     
-            
-            func call() {
-                self?.selectImageBlock?(sucImages, sucAssets, self?.isSelectOriginal ?? false)
-                if !errorAssets.isEmpty {
-                    self?.selectImageRequestErrorBlock?(errorAssets, errorIndexs)
-                }
-            }
             
             if let vc = viewController {
                 self?.isHidden = true
                 vc.dismiss(animated: true) {
-                    call()
+                    self?.selectImageBlockOo?(sucImages, sucAssets, self?.isSelectOriginal ?? false)
                     self?.hide()
                 }
             } else {
                 self?.hide(completion: {
-                    call()
+                    self?.selectImageBlockOo?(sucImages, sucAssets, self?.isSelectOriginal ?? false)
                 })
             }
             
