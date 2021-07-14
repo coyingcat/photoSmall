@@ -293,8 +293,11 @@ class ZLClipImageViewController: UIViewController {
     
     func calculateClipRect() {
         if self.selectedRatio.whRatio == 0 {
+            
+            print("aaaa  aaaaa    aa")
             self.editRect = CGRect(origin: .zero, size: self.editImage.size)
         } else {
+            print("aaaa  aaaaa    bbbbbb  ")
             let imageSize = self.editImage.size
             let imageWHRatio = imageSize.width / imageSize.height
             
@@ -437,6 +440,8 @@ class ZLClipImageViewController: UIViewController {
         self.view.addSubview(animateImageView)
         
         if self.selectedRatio.whRatio == 0 || self.selectedRatio.whRatio == 1 {
+            
+            print("aaaa  aaaaa    xxxx")
             // 自由比例和1:1比例，进行edit rect转换
             
             // 将edit rect转换为相对edit image的rect
@@ -446,6 +451,8 @@ class ZLClipImageViewController: UIViewController {
             // 将rect进行旋转，转换到相对于旋转后的edit image的rect
             self.editRect = CGRect(x: rect.minY, y: self.editImage.size.height-rect.minX-rect.width, width: rect.height, height: rect.width)
         } else {
+            print("aaaa  aaaaa    yyyyyyyy  ")
+            
             // 其他比例的裁剪框，旋转后都重置edit rect
             
             // 旋转图片
