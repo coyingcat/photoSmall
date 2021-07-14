@@ -40,7 +40,7 @@ extension ZLPhotoModel {
 }
 
 
-public class ZLPhotoModel: NSObject {
+public class ZLPhotoModel: NSObject , PropertyLoopable{
 
     public let ident: String
     
@@ -148,4 +148,40 @@ public class ZLPhotoModel: NSObject {
 
 public func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
     return lhs.ident == rhs.ident
+}
+
+
+
+
+
+protocol PropertyLoopable{
+    func allProperties() throws -> [String: Any]
+}
+
+
+
+
+
+extension PropertyLoopable{
+    func allProperties() throws -> [String: Any] {
+
+        var result: [String: Any] = [:]
+
+        let mirror = Mirror(reflecting: self)
+
+        guard let style = mirror.displayStyle, style == .class || style == .struct else {
+            //throw some error
+            throw NSError(domain: "hris.to", code: 777, userInfo: nil)
+        }
+
+        for (labelMaybe, valueMaybe) in mirror.children {
+            guard let label = labelMaybe else {
+                continue
+            }
+
+            result[label] = valueMaybe
+        }
+
+        return result
+    }
 }
