@@ -785,13 +785,9 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         //当前未选择图片 或已经选择了一张并且点击的是已选择的图片
         let flag = self.arrSelectedModels.isEmpty || (self.arrSelectedModels.count == 1 && self.arrSelectedModels.first?.ident == model.ident)
         
-        if canEditImage, flag {
-            self.showEditImageVC(model: model)
-        } else if canEditVideo, flag {
-           
-        }
+        self.showEditImageVC(model: model)
         
-        return flag && (canEditImage || canEditVideo)
+        return true
     }
     
     func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int) {
