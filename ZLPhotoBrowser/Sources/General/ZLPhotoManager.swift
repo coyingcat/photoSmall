@@ -223,13 +223,13 @@ public class ZLPhotoManager: NSObject {
     }
     
     @discardableResult
-    public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
-        return self.fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
+    public class func fetchImage(for asset: PHAsset, size: CGSize, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
+        return self.fetchImageX(for: asset, size: size, resizeMode: .fast, completion: completion)
     }
     
     @discardableResult
     class func fetchOriginalImage(for asset: PHAsset, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void)) -> PHImageRequestID {
-        return self.fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
+        return self.fetchImageX(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast,  completion: completion)
     }
     
     /// Fetch asset data.
@@ -254,15 +254,11 @@ public class ZLPhotoManager: NSObject {
     }
     
     /// Fetch image for asset.
-    private class func fetchImage(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
+    private class func fetchImageX(for asset: PHAsset, size: CGSize, resizeMode: PHImageRequestOptionsResizeMode, completion: @escaping ( (UIImage?, Bool) -> Void )) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         option.resizeMode = resizeMode
         option.isNetworkAccessAllowed = true
-        option.progressHandler = { (pro, error, stop, info) in
-            DispatchQueue.main.async {
-                progress?(CGFloat(pro), error, stop, info)
-            }
-        }
+        option.progressHandler = { (pro, error, stop, info) in   }
         
         return PHImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { (image, info) in
             var downloadFinished = false

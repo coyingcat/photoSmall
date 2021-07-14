@@ -884,11 +884,7 @@ class ZLPreviewView: UIView {
             self.imageView.image = editImage
             self.resetSubViewSize()
         } else {
-            self.imageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: self.requestPhotoSize(gif: false), progress: { [weak self] (progress, _, _, _) in
-              
-                
-                
-            }, completion: { [weak self] (image, isDegraded) in
+            self.imageRequestID = ZLPhotoManager.fetchImage(for: self.model.asset, size: self.requestPhotoSize(gif: false), completion: { [weak self] (image, isDegraded) in
                 guard self?.imageIdentifier == self?.model.ident else {
                     return
                 }
