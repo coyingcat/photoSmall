@@ -444,22 +444,6 @@ public class ZLPhotoPreviewSheet: UIView {
         }
     }
     
- 
-    
-    func showPreviewController(_ models: [ZLPhotoModel], index: Int) {
-        let vc = ZLPhotoPreviewController(photos: models, index: index)
-        let nav = self.getImageNav(rootViewController: vc)
-        vc.backBlockGg = { [weak self, weak nav] in
-            guard let `self` = self else { return }
-            self.isSelectOriginal = nav?.isSelectedOriginal ?? false
-            self.arrSelectedModels.removeAll()
-            self.arrSelectedModels.append(contentsOf: nav?.arrSelectedModels ?? [])
-            markSelected(source: &self.arrDataSources, selected: &self.arrSelectedModels)
-            self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)
-            self.changeCancelBtnTitle()
-        }
-        self.sender?.showDetailViewController(nav, sender: nil)
-    }
     
     func showEditImageVC(model: ZLPhotoModel) {
    

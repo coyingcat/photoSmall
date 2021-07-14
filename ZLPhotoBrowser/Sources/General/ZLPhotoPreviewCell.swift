@@ -38,8 +38,6 @@ class ZLPreviewBaseCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(previewVCScroll), name: ZLPhotoPreviewController.previewVCScrollNotification, object: nil)
     }
     
     required init?(coder: NSCoder) {
