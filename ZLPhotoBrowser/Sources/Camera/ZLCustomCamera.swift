@@ -301,13 +301,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
             takePictureTap = UITapGestureRecognizer(target: self, action: #selector(takePicture))
             self.largeCircleView.addGestureRecognizer(takePictureTap!)
         }
-        if ZLPhotoConfiguration.default().allowRecordVideo {
-            let recordLongPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
-            recordLongPress.minimumPressDuration = 0.3
-            recordLongPress.delegate = self
-            self.largeCircleView.addGestureRecognizer(recordLongPress)
-            takePictureTap?.require(toFail: recordLongPress)
-        }
         
         self.retakeBtn = UIButton(type: .custom)
         self.retakeBtn.setImage(getImage("zl_retake"), for: .normal)
@@ -353,20 +346,6 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         focusCursorTap.delegate = self
         self.view.addGestureRecognizer(focusCursorTap)
         
-        if ZLPhotoConfiguration.default().allowRecordVideo {
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(adjustCameraFocus(_:)))
-            pan.delegate = self
-            pan.maximumNumberOfTouches = 1
-            self.view.addGestureRecognizer(pan)
-            
-            self.recordVideoPlayerLayer = AVPlayerLayer()
-            self.recordVideoPlayerLayer?.backgroundColor = UIColor.black.cgColor
-            self.recordVideoPlayerLayer?.videoGravity = .resizeAspect
-            self.recordVideoPlayerLayer?.isHidden = true
-            self.view.layer.insertSublayer(self.recordVideoPlayerLayer!, at: 0)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        }
         
         let pinchGes = UIPinchGestureRecognizer(target: self, action: #selector(pinchToAdjustCameraFocus(_:)))
         self.view.addGestureRecognizer(pinchGes)
@@ -647,17 +626,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.imageOutput.capturePhoto(with: setting, delegate: self)
     }
     
-    // 长按录像
-    @objc func longPressAction(_ longGes: UILongPressGestureRecognizer) {
-        if longGes.state == .began {
-            guard ZLPhotoManager.hasCameraAuthority(), ZLPhotoManager.hasMicrophoneAuthority() else {
-                return
-            }
-            self.startRecord()
-        } else if longGes.state == .cancelled || longGes.state == .ended {
-            self.finishRecord()
-        }
-    }
+  
     
     // 调整焦点
     @objc func adjustFocusPoint(_ tap: UITapGestureRecognizer) {
@@ -690,33 +659,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         )
     }
     
-    // 调整焦距
-    @objc func adjustCameraFocus(_ pan: UIPanGestureRecognizer) {
-        let convertRect = self.bottomView.convert(self.largeCircleView.frame, to: self.view)
-        let point = pan.location(in: self.view)
-        
-        if pan.state == .began {
-            if !convertRect.contains(point) {
-                return
-            }
-            self.dragStart = true
-            self.startRecord()
-        } else if pan.state == .changed {
-            guard self.dragStart else {
-                return
-            }
-            let maxZoomFactor = self.getMaxZoomFactor()
-            var zoomFactor = (convertRect.midY - point.y) / convertRect.midY * maxZoomFactor
-            zoomFactor = max(1, min(zoomFactor, maxZoomFactor))
-            self.setVideoZoomFactor(zoomFactor)
-        } else if pan.state == .cancelled || pan.state == .ended {
-            guard self.dragStart else {
-                return
-            }
-            self.dragStart = false
-            self.finishRecord()
-        }
-    }
+ 
     
     @objc func pinchToAdjustCameraFocus(_ pinch: UIPinchGestureRecognizer) {
         guard let device = self.videoInput?.device else {
@@ -782,27 +725,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         }
     }
     
-    func startRecord() {
-        guard !self.movieFileOutput.isRecording else {
-            return
-        }
-        self.dismissBtn.isHidden = true
-        let connection = self.movieFileOutput.connection(with: .video)
-        connection?.videoScaleAndCropFactor = 1
-        if !self.restartRecordAfterSwitchCamera {
-            connection?.videoOrientation = self.orientation
-            self.cacheVideoOrientation = self.orientation
-        } else {
-            connection?.videoOrientation = self.cacheVideoOrientation
-        }
-        // 解决前置摄像头录制视频时候左右颠倒的问题
-        if self.videoInput?.device.position == .front, connection?.isVideoMirroringSupported == true {
-            // 镜像设置
-            connection?.isVideoMirrored = true
-        }
-        let url = URL(fileURLWithPath: ZLVideoManager.getVideoExportFilePath())
-        self.movieFileOutput.startRecording(to: url, recordingDelegate: self)
-    }
+
     
     func finishRecord() {
         guard self.movieFileOutput.isRecording else {
@@ -919,56 +842,7 @@ extension ZLCustomCamera: AVCaptureFileOutputRecordingDelegate {
         }
     }
     
-    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        if self.restartRecordAfterSwitchCamera {
-            self.recordUrls.append(outputFileURL)
-            self.startRecord()
-            return
-        }
-        self.recordUrls.append(outputFileURL)
-        
-        var duration: Double = 0
-        if self.recordUrls.count == 1 {
-            duration = output.recordedDuration.seconds
-        } else {
-            for url in self.recordUrls {
-                let temp = AVAsset(url: url)
-                duration += temp.duration.seconds
-            }
-        }
-        
-        // 重置焦距
-        self.setVideoZoomFactor(1)
-        if duration < Double(ZLPhotoConfiguration.default().minRecordDuration) {
-            showAlertView(String(format: localLanguageTextValue(.minRecordTimeTips), ZLPhotoConfiguration.default().minRecordDuration), self)
-            self.resetSubViewStatus()
-            self.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
-            self.recordUrls.removeAll()
-            return
-        }
-        
-        // 拼接视频
-        self.session.stopRunning()
-        self.resetSubViewStatus()
-        if self.recordUrls.count > 1 {
-            ZLVideoManager.mergeVideos(fileUrls: self.recordUrls) { [weak self] (url, error) in
-                if let url = url, error == nil {
-                    self?.videoUrl = url
-                    self?.playRecordVideo(fileUrl: url)
-                } else if let error = error {
-                    self?.videoUrl = nil
-                    showAlertView(error.localizedDescription, self)
-                }
-
-                self?.recordUrls.forEach { try? FileManager.default.removeItem(at: $0) }
-                self?.recordUrls.removeAll()
-            }
-        } else {
-            self.videoUrl = outputFileURL
-            self.playRecordVideo(fileUrl: outputFileURL)
-            self.recordUrls.removeAll()
-        }
-    }
+    public func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {}
     
 }
 
