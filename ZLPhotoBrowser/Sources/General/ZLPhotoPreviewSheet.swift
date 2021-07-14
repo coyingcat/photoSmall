@@ -105,10 +105,7 @@ public class ZLPhotoPreviewSheet: UIView {
         
         self.arrSelectedModels.removeAll()
         selectedAssets.removeDuplicate().forEach { (asset) in
-            if !ZLPhotoConfiguration.default().allowMixSelect, asset.mediaType == .video {
-                return
-            }
-            
+         
             let m = ZLPhotoModel(asset: asset)
             m.isSelected = true
             self.arrSelectedModels.append(m)
@@ -606,11 +603,8 @@ public class ZLPhotoPreviewSheet: UIView {
     func handleDataArray(newModel: ZLPhotoModel) {
         self.arrDataSources.insert(newModel, at: 0)
         
-        var canSelect = true
-        // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
-        if !ZLPhotoConfiguration.default().allowMixSelect {
-            canSelect = false
-        }
+        let canSelect = false
+ 
         if canSelect, canAddModel(newModel, currentSelectCount: self.arrSelectedModels.count, sender: self.sender, showAlert: false) {
          
         }
@@ -779,15 +773,13 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             }
         } else {
             let selCount = self.arrSelectedModels.count
-            if selCount < config.maxSelectCount {
-                if config.allowMixSelect {
-
-                } else if selCount > 0 {
+            if selCount < 1 {
+                if selCount > 0 {
                     cell.coverView.backgroundColor = .invalidMaskColor
                     cell.coverView.isHidden = (!config.showInvalidMask)
                     
                 }
-            } else if selCount >= config.maxSelectCount {
+            } else if selCount >= 1 {
                 cell.coverView.backgroundColor = .invalidMaskColor
                 cell.coverView.isHidden = !config.showInvalidMask
                 cell.enableSelect = false

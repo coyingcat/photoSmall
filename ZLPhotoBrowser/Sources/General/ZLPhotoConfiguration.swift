@@ -48,49 +48,7 @@ public class ZLPhotoConfiguration: NSObject {
     
     /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
     @objc public var sortAscending = true
-    
-    private var pri_maxSelectCount = 9
-    /// Anything superior than 1 will enable the multiple selection feature. Defaults to 9.
-    @objc public var maxSelectCount: Int {
-        set {
-            pri_maxSelectCount = max(1, newValue)
-        }
-        get {
-            return pri_maxSelectCount
-        }
-    }
-    
-    private var pri_maxVideoSelectCount = 0
-    /// A count for video max selection. Defaults to 0.
-    /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
-    @objc public var maxVideoSelectCount: Int {
-        set {
-            pri_maxVideoSelectCount = newValue
-        }
-        get {
-            if pri_maxVideoSelectCount <= 0 {
-                return maxSelectCount
-            } else {
-                return max(minVideoSelectCount, min(pri_maxVideoSelectCount, maxSelectCount))
-            }
-        }
-    }
-    
-    private var pri_minVideoSelectCount = 0
-    /// A count for video min selection. Defaults to 0.
-    /// - warning: Only valid in mix selection mode. (i.e. allowMixSelect = true)
-    @objc public var minVideoSelectCount: Int {
-        set {
-            pri_minVideoSelectCount = newValue
-        }
-        get {
-            return min(maxSelectCount, max(pri_minVideoSelectCount, 0))
-        }
-    }
-    
-    /// Whether photos and videos can be selected together. Default is true.
-    /// If set to false, only one video can be selected. Defaults to true.
-    @objc public var allowMixSelect = true
+
     
     /// Preview selection max preview count, if the value is zero, only show `Camera`, `Album`, `Cancel` buttons. Defaults to 20.
     @objc public var maxPreviewCount = 20

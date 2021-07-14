@@ -185,19 +185,6 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             } else {
                 self.bottomShadowView.isHidden = true
             }
-        
-        
-        let showSelBtn: Bool
-        if ZLPhotoConfiguration.default().maxSelectCount > 1 {
-            if !ZLPhotoConfiguration.default().allowMixSelect {
-                
-            } else {
-                showSelBtn = true
-            }
-        } else {
-            showSelBtn = ZLPhotoConfiguration.default().showSelectBtnWhenSingleSelect
-        }
-        
 
         self.btnSelect.isSelected = self.model.isSelected
         

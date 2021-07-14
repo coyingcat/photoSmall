@@ -205,7 +205,7 @@ class PhotoConfigureCNViewController: UIViewController {
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        self.selectCountTextField = createTextField(String(config.maxSelectCount), .numberPad)
+        self.selectCountTextField = createTextField(String(1), .numberPad)
         containerView.addSubview(self.selectCountTextField)
         self.selectCountTextField.snp.makeConstraints { (make) in
             make.left.equalTo(maxSelectCountLabel.snp.right).offset(horSpacing)
@@ -221,7 +221,7 @@ class PhotoConfigureCNViewController: UIViewController {
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        self.minVideoSelectCountTextField = createTextField(String(config.minVideoSelectCount), .numberPad)
+        self.minVideoSelectCountTextField = createTextField(String(1), .numberPad)
         containerView.addSubview(self.minVideoSelectCountTextField)
         self.minVideoSelectCountTextField.snp.makeConstraints { (make) in
             make.left.equalTo(minVideoSelectCountLabel.snp.right).offset(horSpacing)
@@ -237,7 +237,7 @@ class PhotoConfigureCNViewController: UIViewController {
             make.left.equalTo(previewCountLabel.snp.left)
         }
         
-        self.maxVideoSelectCountTextField = createTextField(String(config.maxVideoSelectCount), .numberPad)
+        self.maxVideoSelectCountTextField = createTextField(String(1), .numberPad)
         containerView.addSubview(self.maxVideoSelectCountTextField)
         self.maxVideoSelectCountTextField.snp.makeConstraints { (make) in
             make.left.equalTo(maxVideoSelectCountLabel.snp.right).offset(horSpacing)
@@ -471,7 +471,7 @@ class PhotoConfigureCNViewController: UIViewController {
         }
         
         self.allowMixSelectSwitch = UISwitch()
-        self.allowMixSelectSwitch.isOn = config.allowMixSelect
+       
         self.allowMixSelectSwitch.addTarget(self, action: #selector(allowMixSelectChanged), for: .valueChanged)
         containerView.addSubview(self.allowMixSelectSwitch)
         self.allowMixSelectSwitch.snp.makeConstraints { (make) in
@@ -926,7 +926,7 @@ class PhotoConfigureCNViewController: UIViewController {
     }
     
     @objc func allowMixSelectChanged() {
-        config.allowMixSelect = allowMixSelectSwitch.isOn
+       
     }
     
     @objc func allowPreviewPhotoChanged() {
@@ -1040,11 +1040,11 @@ extension PhotoConfigureCNViewController: UITextFieldDelegate {
         if textField == self.previewCountTextField {
             config.maxPreviewCount = Int(textField.text ?? "") ?? 20
         } else if textField == self.selectCountTextField {
-            config.maxSelectCount = Int(textField.text ?? "") ?? 9
+           
         } else if textField == self.minVideoSelectCountTextField {
-            config.minVideoSelectCount = Int(textField.text ?? "") ?? 0
+          
         } else if textField == self.maxVideoSelectCountTextField {
-            config.maxVideoSelectCount = Int(textField.text ?? "") ?? 0
+            
         } else if textField == self.minVideoDurationTextField {
             config.minSelectVideoDuration = Int(textField.text ?? "") ?? 0
         } else if textField == self.maxVideoDurationTextField {

@@ -323,9 +323,7 @@ class ZLPhotoPreviewController: UIViewController {
     func resetSubViewStatus() {
         let nav = self.navigationController as! ZLImageNavController
         let config = ZLPhotoConfiguration.default()
-        let currentModel = self.arrDataSources[self.currentIndex]
-        
-        if (!config.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
+        if (!config.showSelectBtnWhenSingleSelect) {
             self.selectBtn.isHidden = true
         } else {
             self.selectBtn.isHidden = false
