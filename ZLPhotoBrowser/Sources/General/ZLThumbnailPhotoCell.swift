@@ -265,16 +265,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
     func fetchBigImage() {
         self.cancelFetchBigImage()
         
-        self.bigImageReqeustID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset, progress: { [weak self] (progress, error, _, _) in
-            if self?.model.isSelected == true {
-                self?.imageView.alpha = 0.5
-                if progress >= 1 {
-                    self?.resetProgressViewStatus()
-                }
-            } else {
-                self?.cancelFetchBigImage()
-            }
-        }, completion: { [weak self] (_, _, _) in
+        self.bigImageReqeustID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset, completion: { [weak self] (_, _, _) in
             self?.resetProgressViewStatus()
         })
     }

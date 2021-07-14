@@ -234,7 +234,7 @@ public class ZLPhotoManager: NSObject {
     
     /// Fetch asset data.
     @discardableResult
-    class func fetchOriginalImageData(for asset: PHAsset, progress: ( (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable : Any]?) -> Void )? = nil, completion: @escaping ( (Data, [AnyHashable: Any]?, Bool) -> Void)) -> PHImageRequestID {
+    class func fetchOriginalImageData(for asset: PHAsset, completion: @escaping ( (Data, [AnyHashable: Any]?, Bool) -> Void)) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         if (asset.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
             option.version = .original
@@ -242,11 +242,7 @@ public class ZLPhotoManager: NSObject {
         option.isNetworkAccessAllowed = true
         option.resizeMode = .fast
         option.deliveryMode = .highQualityFormat
-        option.progressHandler = { (pro, error, stop, info) in
-            DispatchQueue.main.async {
-                progress?(CGFloat(pro), error, stop, info)
-            }
-        }
+        option.progressHandler = { (pro, error, stop, info) in }
         
         return PHImageManager.default().requestImageData(for: asset, options: option) { (data, _, _, info) in
             let cancel = info?[PHImageCancelledKey] as? Bool ?? false

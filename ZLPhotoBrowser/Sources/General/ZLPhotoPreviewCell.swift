@@ -929,9 +929,7 @@ class ZLPreviewView: UIView {
         self.imageView.layer.speed = 1
         self.imageView.layer.timeOffset = 0
         self.imageView.layer.beginTime = 0
-        self.gifImageRequestID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset, progress: { [weak self] (progress, _, _, _) in
-         
-        }, completion: { [weak self] (data, _, isDegraded) in
+        self.gifImageRequestID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset, completion: { [weak self] (data, _, isDegraded) in
             guard self?.imageIdentifier == self?.model.ident else {
                 return
             }
