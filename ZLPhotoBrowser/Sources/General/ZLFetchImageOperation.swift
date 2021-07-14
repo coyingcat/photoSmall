@@ -111,13 +111,13 @@ class ZLFetchImageOperation: Operation {
         }
         
         if ZLPhotoConfiguration.default().allowSelectGif, self.model.type == .gif {
-            self.requestImageID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset) { [weak self] (data, _, isDegraded) in
-                if !isDegraded {
+            self.requestImageID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset) { [weak self] (data, _) in
+                
                     let image = UIImage.zl_animateGifImage(data: data)
                     self?.completion(image, nil)
                     self?.fetchFinish()
-                }
             }
+            
             return
         }
         

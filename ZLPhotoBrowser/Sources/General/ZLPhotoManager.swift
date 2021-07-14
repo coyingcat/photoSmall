@@ -234,7 +234,7 @@ public class ZLPhotoManager: NSObject {
     
     /// Fetch asset data.
     @discardableResult
-    class func fetchOriginalImageData(for asset: PHAsset, completion: @escaping ( (Data, [AnyHashable: Any]?, Bool) -> Void)) -> PHImageRequestID {
+    class func fetchOriginalImageData(for asset: PHAsset, completionX: @escaping ( (Data, [AnyHashable: Any]?) -> Void)) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         if (asset.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
             option.version = .original
@@ -246,9 +246,8 @@ public class ZLPhotoManager: NSObject {
         
         return PHImageManager.default().requestImageData(for: asset, options: option) { (data, _, _, info) in
             let cancel = info?[PHImageCancelledKey] as? Bool ?? false
-            let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             if !cancel, let data = data {
-                completion(data, info, isDegraded)
+                completionX(data, info)
             }
         }
     }
