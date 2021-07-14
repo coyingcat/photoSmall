@@ -26,23 +26,6 @@
 
 import UIKit
 
-// MARK: 裁剪比例
-
-public class ZLImageClipRatio: NSObject {
-    
-    let title: String
-    
-    let whRatio: CGFloat
-    
-    @objc public init(title: String, whRatio: CGFloat) {
-        self.title = title
-        self.whRatio = whRatio
-    }
-    
-}
-
-
-
 class ZLClipImageViewController: UIViewController {
 
     static let bottomToolViewH: CGFloat = 90
@@ -60,7 +43,7 @@ class ZLClipImageViewController: UIViewController {
     
     var viewDidAppearCount = 0
     
-    let clipRatios: ZLImageClipRatio
+
     
     var editImage: UIImage
     
@@ -96,7 +79,6 @@ class ZLClipImageViewController: UIViewController {
     
     var angle: CGFloat = 0
     
-    var selectedRatio: ZLImageClipRatio
     
     lazy var maxClipFrame: CGRect = {
         var insets = deviceSafeAreaInsets()
@@ -130,7 +112,7 @@ class ZLClipImageViewController: UIViewController {
 
     
     init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0) {
-        self.clipRatios = ZLPhotoConfiguration.default().editImageClipRatios
+
         self.editRect = editRect ?? .zero
         self.angle = angle
         if angle == -90 {
@@ -143,8 +125,6 @@ class ZLClipImageViewController: UIViewController {
             self.editImage = image
         }
       
-        self.selectedRatio = ZLPhotoConfiguration.default().editImageClipRatios
-        
         super.init(nibName: nil, bundle: nil)
 
             self.calculateClipRect()
@@ -292,26 +272,11 @@ class ZLClipImageViewController: UIViewController {
     
     
     func calculateClipRect() {
-        if self.selectedRatio.whRatio == 0 {
+       
             
             print("aaaa  aaaaa    aa")
             self.editRect = CGRect(origin: .zero, size: self.editImage.size)
-        } else {
-            print("aaaa  aaaaa    bbbbbb  ")
-            let imageSize = self.editImage.size
-            let imageWHRatio = imageSize.width / imageSize.height
-            
-            var w: CGFloat = 0, h: CGFloat = 0
-            if self.selectedRatio.whRatio >= imageWHRatio {
-                w = imageSize.width
-                h = w / self.selectedRatio.whRatio
-            } else {
-                h = imageSize.height
-                w = h * self.selectedRatio.whRatio
-            }
-            
-            self.editRect = CGRect(x: (imageSize.width - w) / 2, y: (imageSize.height - h) / 2, width: w, height: h)
-        }
+       
     }
     
     func layoutInitialImage() {
@@ -439,8 +404,7 @@ class ZLClipImageViewController: UIViewController {
         animateImageView.frame = originFrame
         self.view.addSubview(animateImageView)
         
-        if self.selectedRatio.whRatio == 0 || self.selectedRatio.whRatio == 1 {
-            
+ 
             print("aaaa  aaaaa    xxxx")
             // 自由比例和1:1比例，进行edit rect转换
             
@@ -450,15 +414,7 @@ class ZLClipImageViewController: UIViewController {
             self.editImage = self.editImage.rotate(orientation: .left)
             // 将rect进行旋转，转换到相对于旋转后的edit image的rect
             self.editRect = CGRect(x: rect.minY, y: self.editImage.size.height-rect.minX-rect.width, width: rect.height, height: rect.width)
-        } else {
-            print("aaaa  aaaaa    yyyyyyyy  ")
-            
-            // 其他比例的裁剪框，旋转后都重置edit rect
-            
-            // 旋转图片
-            self.editImage = self.editImage.rotate(orientation: .left)
-            self.calculateClipRect()
-        }
+    
         
         self.imageView.image = self.editImage
         self.layoutInitialImage()
