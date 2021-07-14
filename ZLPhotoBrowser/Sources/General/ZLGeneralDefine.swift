@@ -48,6 +48,29 @@ struct ZLLayout {
     
 }
 
+
+
+public class ZLEditImageModel: NSObject {
+    
+    
+    public let editRect: CGRect?
+    
+    public let angle: CGFloat
+    
+
+
+    init(editRect: CGRect?, angle: CGFloat) {
+
+        self.editRect = editRect
+        self.angle = angle
+
+        super.init()
+    }
+    
+}
+
+
+
 func zlRGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat) -> UIColor {
     return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1)
 }

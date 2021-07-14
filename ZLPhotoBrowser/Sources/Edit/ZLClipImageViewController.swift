@@ -26,6 +26,23 @@
 
 import UIKit
 
+// MARK: 裁剪比例
+
+public class ZLImageClipRatio: NSObject {
+    
+    let title: String
+    
+    let whRatio: CGFloat
+    
+    @objc public init(title: String, whRatio: CGFloat) {
+        self.title = title
+        self.whRatio = whRatio
+    }
+    
+}
+
+
+
 class ZLClipImageViewController: UIViewController {
 
     static let bottomToolViewH: CGFloat = 90
@@ -148,9 +165,7 @@ class ZLClipImageViewController: UIViewController {
         super.viewDidAppear(animated)
         
         self.viewDidAppearCount += 1
-        if self.presentingViewController is ZLEditImageViewController {
-            self.transitioningDelegate = self
-        }
+
         
         guard self.viewDidAppearCount == 1 else {
             return

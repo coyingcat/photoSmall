@@ -29,6 +29,14 @@ import Photos
 
 public typealias Second = Int
 
+
+public enum EditImageTool: Int {
+
+    case clip
+
+}
+
+
 public class ZLPhotoConfiguration: NSObject {
 
     private static var single = ZLPhotoConfiguration()
@@ -159,7 +167,7 @@ public class ZLPhotoConfiguration: NSObject {
     /// Edit image tools. (Default order is draw, clip, imageSticker, textSticker, mosaic, filtter)
     /// Because Objective-C Array can't contain Enum styles, so this property is invalid in Objective-C.
     /// - warning: If you want to use the image sticker feature, you must provide a view that implements ZLImageStickerContainerDelegate.
-    public var editImageTools: [ZLEditImageViewController.EditImageTool] {
+    public var editImageTools: [EditImageTool] {
         return [.clip]
     }
     

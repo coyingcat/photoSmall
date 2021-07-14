@@ -591,13 +591,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
     }
     
     @objc func editBtnClick() {
-        guard let image = self.takedImage else {
-            return
-        }
-        ZLEditImageViewController.showEditImageVC_(parentVC: self, image: image) { [weak self] (ei, _) in
-            self?.takedImage = ei
-            self?.takedImageView.image = ei
-        }
+
     }
     
     @objc func doneBtnClick() {
