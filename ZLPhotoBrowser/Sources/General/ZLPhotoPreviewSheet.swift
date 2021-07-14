@@ -206,10 +206,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.flexibleView.backgroundColor = .previewBtnBgColor
         self.baseView.addSubview(self.flexibleView)
         
-        if ZLPhotoConfiguration.default().allowDragSelect {
-            let pan = UIPanGestureRecognizer(target: self, action: #selector(panSelectAction(_:)))
-            self.baseView.addGestureRecognizer(pan)
-        }
+ 
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
         tap.delegate = self
@@ -353,7 +350,7 @@ public class ZLPhotoPreviewSheet: UIView {
         if config.useCustomCamera {
             let camera = ZLCustomCamera()
             camera.takeDoneBlockX = { [weak self] (image) in
-                self?.save(image: image)
+                self?.saveX(image: image)
             }
             self.sender?.showDetailViewController(camera, sender: nil)
         } else {
@@ -394,73 +391,7 @@ public class ZLPhotoPreviewSheet: UIView {
         self.requestSelectPhoto()
     }
     
-    @objc func panSelectAction(_ pan: UIPanGestureRecognizer) {
-        let point = pan.location(in: self.collectionView)
-        if pan.state == .began {
-            let cp = self.baseView.convert(point, from: self.collectionView)
-            guard self.collectionView.frame.contains(cp) else {
-                self.panBeginPoint = .zero
-                return
-            }
-            self.panBeginPoint = point
-        } else if pan.state == .changed {
-            guard self.panBeginPoint != .zero else {
-                return
-            }
-            
-            guard let indexPath = self.collectionView.indexPathForItem(at: self.panBeginPoint) else {
-                return
-            }
-            
-            if self.panImageView == nil {
-                guard point.y < self.panBeginPoint.y else {
-                    return
-                }
-                guard let cell = self.collectionView.cellForItem(at: indexPath) as? ZLThumbnailPhotoCell else {
-                    return
-                }
-                self.panModel = self.arrDataSources[indexPath.row]
-                self.panCell = cell
-                self.panImageView = UIImageView(frame: cell.bounds)
-                self.panImageView?.contentMode = .scaleAspectFill
-                self.panImageView?.clipsToBounds = true
-                self.panImageView?.image = cell.imageView.image
-                cell.imageView.image = nil
-                self.addSubview(self.panImageView!)
-            }
-            self.panImageView?.center = self.convert(point, from: self.collectionView)
-        } else if pan.state == .cancelled || pan.state == .ended {
-            guard let pv = self.panImageView else {
-                return
-            }
-            let pvRect = self.baseView.convert(pv.frame, from: self)
-            var callBack = false
-            if pvRect.midY < -10 {
-                self.arrSelectedModels.removeAll()
-                self.arrSelectedModels.append(self.panModel!)
-                self.requestSelectPhoto()
-                callBack = true
-            }
-            
-            self.panModel = nil
-            if !callBack {
-                let toRect = self.convert(self.panCell?.frame ?? .zero, from: self.collectionView)
-                UIView.animate(withDuration: 0.25, animations: {
-                    self.panImageView?.frame = toRect
-                }) { (_) in
-                    self.panCell?.imageView.image = self.panImageView?.image
-                    self.panCell = nil
-                    self.panImageView?.removeFromSuperview()
-                    self.panImageView = nil
-                }
-            } else {
-                self.panCell?.imageView.image = self.panImageView?.image
-                self.panImageView?.removeFromSuperview()
-                self.panImageView = nil
-                self.panCell = nil
-            }
-        }
-    }
+
     
     func requestSelectPhoto(viewController: UIViewController? = nil) {
         guard !self.arrSelectedModels.isEmpty else {
@@ -584,7 +515,7 @@ public class ZLPhotoPreviewSheet: UIView {
         return nav
     }
     
-    func save(image: UIImage?) {
+    func saveX(image: UIImage?) {
    
         if let image = image {
            
@@ -602,12 +533,6 @@ public class ZLPhotoPreviewSheet: UIView {
     
     func handleDataArray(newModel: ZLPhotoModel) {
         self.arrDataSources.insert(newModel, at: 0)
-        
-        let canSelect = false
- 
-        if canSelect, canAddModel(newModel, currentSelectCount: self.arrSelectedModels.count, sender: self.sender, showAlert: false) {
-         
-        }
         
         let insertIndexPath = IndexPath(row: 0, section: 0)
         self.collectionView.performBatchUpdates({
@@ -809,7 +734,7 @@ extension ZLPhotoPreviewSheet: UIImagePickerControllerDelegate, UINavigationCont
         picker.dismiss(animated: true) {
             let image = info[.originalImage] as? UIImage
          
-            self.save(image: image)
+            self.saveX(image: image)
         }
     }
     

@@ -394,7 +394,7 @@ class ZLPhotoPreviewController: UIViewController {
     }
     
     @objc func editBtnClick() {
-        let config = ZLPhotoConfiguration.default()
+        
         let model = self.arrDataSources[self.currentIndex]
      
        
