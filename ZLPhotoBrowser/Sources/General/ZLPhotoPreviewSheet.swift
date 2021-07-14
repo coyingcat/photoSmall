@@ -364,8 +364,8 @@ public class ZLPhotoPreviewSheet: UIView {
         let config = ZLPhotoConfiguration.default()
         if config.useCustomCamera {
             let camera = ZLCustomCamera()
-            camera.takeDoneBlock = { [weak self] (image, videoUrl) in
-                self?.save(image: image, videoUrl: videoUrl)
+            camera.takeDoneBlockX = { [weak self] (image) in
+                self?.save(image: image)
             }
             self.sender?.showDetailViewController(camera, sender: nil)
         } else {
@@ -625,7 +625,7 @@ public class ZLPhotoPreviewSheet: UIView {
         return nav
     }
     
-    func save(image: UIImage?, videoUrl: URL?) {
+    func save(image: UIImage?) {
    
         if let image = image {
            
@@ -637,16 +637,6 @@ public class ZLPhotoPreviewSheet: UIView {
                     showAlertView(localLanguageTextValue(.saveImageError), self?.sender)
                 }
          
-            }
-        } else if let videoUrl = videoUrl {
-      
-            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] (suc, asset) in
-                if suc, let at = asset {
-                    let model = ZLPhotoModel(asset: at)
-                    self?.handleDataArray(newModel: model)
-                } else {
-                    showAlertView(localLanguageTextValue(.saveVideoError), self?.sender)
-                }
             }
         }
     }
@@ -931,8 +921,8 @@ extension ZLPhotoPreviewSheet: UIImagePickerControllerDelegate, UINavigationCont
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true) {
             let image = info[.originalImage] as? UIImage
-            let url = info[.mediaURL] as? URL
-            self.save(image: image, videoUrl: url)
+         
+            self.save(image: image)
         }
     }
     

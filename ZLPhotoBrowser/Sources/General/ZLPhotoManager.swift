@@ -54,30 +54,7 @@ public class ZLPhotoManager: NSObject {
         }
     }
     
-    /// Save video to album.
-    @objc public class func saveVideoToAlbum(url: URL, completion: ( (Bool, PHAsset?) -> Void )? ) {
-        let status = PHPhotoLibrary.authorizationStatus()
-        
-        if status == .denied || status == .restricted {
-            completion?(false, nil)
-            return
-        }
-        
-        var placeholderAsset: PHObjectPlaceholder? = nil
-        PHPhotoLibrary.shared().performChanges({
-            let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
-            placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
-        }) { (suc, error) in
-            DispatchQueue.main.async {
-                if suc {
-                    let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
-                    completion?(suc, asset)
-                } else {
-                    completion?(false, nil)
-                }
-            }
-        }
-    }
+
     
     private class func getAsset(from localIdentifier: String?) -> PHAsset? {
         guard let id = localIdentifier else {

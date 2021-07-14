@@ -173,13 +173,13 @@ class ViewController: UIViewController {
     
     @objc func showCamera() {
         let camera = ZLCustomCamera()
-        camera.takeDoneBlock = { [weak self] (image, videoUrl) in
-            self?.save(image: image, videoUrl: videoUrl)
+        camera.takeDoneBlockX = { [weak self] (image) in
+            self?.save(image: image)
         }
         self.showDetailViewController(camera, sender: nil)
     }
     
-    func save(image: UIImage?, videoUrl: URL?) {
+    func save(image: UIImage?) {
 
         if let image = image {
         
@@ -192,15 +192,6 @@ class ViewController: UIViewController {
                     debugPrint("保存图片到相册失败")
                 }
          
-            }
-        } else if let videoUrl = videoUrl {
-       
-            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] (suc, asset) in
-                if suc, let at = asset {
-                    self?.fetchImage(for: at)
-                } else {
-                    debugPrint("保存视频到相册失败")
-                }
             }
         }
     }

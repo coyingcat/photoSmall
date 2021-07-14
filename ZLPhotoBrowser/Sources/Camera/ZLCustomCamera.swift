@@ -44,7 +44,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         
     }
     
-    @objc public var takeDoneBlock: ( (UIImage?, URL?) -> Void )?
+    @objc public var takeDoneBlockX: ( (UIImage?) -> Void )?
     
     var tipsLabel: UILabel!
     
@@ -625,7 +625,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         self.recordVideoPlayerLayer?.player?.pause()
         self.recordVideoPlayerLayer?.player = nil
         self.dismiss(animated: true) {
-            self.takeDoneBlock?(self.takedImage, self.videoUrl)
+            self.takeDoneBlockX?(self.takedImage)
         }
     }
     
@@ -640,7 +640,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         if self.videoInput?.device.position == .front, connection?.isVideoMirroringSupported == true {
             connection?.isVideoMirrored = true
         }
-        let setting = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecJPEG])
+        let setting = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
         if self.videoInput?.device.hasFlash == true {
             setting.flashMode = ZLPhotoConfiguration.default().cameraConfiguration.flashMode.avFlashMode
         }
