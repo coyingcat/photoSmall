@@ -766,27 +766,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func shouldDirectEdit(_ model: ZLPhotoModel) -> Bool {
-        let config = ZLPhotoConfiguration.default()
-        
-        let canEditImage = config.editAfterSelectThumbnailImage &&
-            config.allowEditImage &&
-            config.maxSelectCount == 1 &&
-            model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
-        
-        let canEditVideo = (config.editAfterSelectThumbnailImage &&
-            config.allowEditVideo &&
-            model.type == .video &&
-            config.maxSelectCount == 1) ||
-            (config.allowEditVideo &&
-            model.type == .video &&
-            !config.allowMixSelect &&
-            config.cropVideoAfterSelectThumbnail)
-        
-        //当前未选择图片 或已经选择了一张并且点击的是已选择的图片
-        let flag = self.arrSelectedModels.isEmpty || (self.arrSelectedModels.count == 1 && self.arrSelectedModels.first?.ident == model.ident)
-        
-        self.showEditImageVC(model: model)
-        
+        showEditImageVC(model: model)
         return true
     }
     
