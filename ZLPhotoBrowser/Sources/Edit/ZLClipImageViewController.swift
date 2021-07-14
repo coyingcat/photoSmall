@@ -524,12 +524,3 @@ extension ZLClipImageViewController: UIScrollViewDelegate {
   
     
 }
-
-
-extension ZLClipImageViewController: UIViewControllerTransitioningDelegate {
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return ZLClipImageDismissAnimatedTransition()
-    }
-    
-}
