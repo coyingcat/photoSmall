@@ -175,25 +175,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             self.layer.masksToBounds = true
         }
         
-        if self.model.type == .video {
-            self.bottomShadowView.isHidden = false
-            self.videoTag.isHidden = false
-            self.livePhotoTag.isHidden = true
-            self.editImageTag.isHidden = true
-            self.descLabel.text = self.model.duration
-        } else if self.model.type == .gif {
-            self.bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectGif
-            self.videoTag.isHidden = true
-            self.livePhotoTag.isHidden = true
-            self.editImageTag.isHidden = true
-            self.descLabel.text = "GIF"
-        } else if self.model.type == .livePhoto {
-            self.bottomShadowView.isHidden = !ZLPhotoConfiguration.default().allowSelectLivePhoto
-            self.videoTag.isHidden = true
-            self.livePhotoTag.isHidden = false
-            self.editImageTag.isHidden = true
-            self.descLabel.text = "Live"
-        } else {
+   
             if let _ = self.model.editImage {
                 self.bottomShadowView.isHidden = false
                 self.videoTag.isHidden = true
@@ -203,12 +185,12 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             } else {
                 self.bottomShadowView.isHidden = true
             }
-        }
+        
         
         let showSelBtn: Bool
         if ZLPhotoConfiguration.default().maxSelectCount > 1 {
             if !ZLPhotoConfiguration.default().allowMixSelect {
-                showSelBtn = self.model.type.rawValue < ZLPhotoModel.MediaType.video.rawValue
+                
             } else {
                 showSelBtn = true
             }
@@ -216,8 +198,7 @@ class ZLThumbnailPhotoCell: UICollectionViewCell {
             showSelBtn = ZLPhotoConfiguration.default().showSelectBtnWhenSingleSelect
         }
         
-        self.btnSelect.isHidden = !showSelBtn
-        self.btnSelect.isUserInteractionEnabled = showSelBtn
+
         self.btnSelect.isSelected = self.model.isSelected
         
         self.indexLabel.backgroundColor = .indexLabelBgColor

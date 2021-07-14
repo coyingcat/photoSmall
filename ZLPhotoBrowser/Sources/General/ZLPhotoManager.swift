@@ -76,12 +76,7 @@ public class ZLPhotoManager: NSObject {
         result.enumerateObjects(options: option) { (asset, index, stop) in
             let m = ZLPhotoModel(asset: asset)
             
-            if m.type == .image, !allowSelectImage {
-                return
-            }
-            if m.type == .video, !allowSelectVideo {
-                return
-            }
+ 
             if count == limitCount {
                 stop.pointee = true
             }

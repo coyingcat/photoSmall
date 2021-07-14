@@ -27,17 +27,6 @@
 import UIKit
 import Photos
 
-extension ZLPhotoModel {
-    
-    public enum MediaType: Int {
-        case unknown = 0
-        case image
-        case gif
-        case livePhoto
-        case video
-    }
-    
-}
 
 
 public class ZLPhotoModel: NSObject , PropertyLoopable{
@@ -46,9 +35,7 @@ public class ZLPhotoModel: NSObject , PropertyLoopable{
     
     public let asset: PHAsset
     
-    public var type: ZLPhotoModel.MediaType = .unknown
     
-    public var duration: String = ""
     
     public var isSelected: Bool = false
     
@@ -66,12 +53,7 @@ public class ZLPhotoModel: NSObject , PropertyLoopable{
         }
     }
     
-    public var second: Second {
-        guard type == .video else {
-            return 0
-        }
-        return Int(round(asset.duration))
-    }
+
     
     public var whRatio: CGFloat {
         return CGFloat(self.asset.pixelWidth) / CGFloat(self.asset.pixelHeight)
@@ -98,31 +80,9 @@ public class ZLPhotoModel: NSObject , PropertyLoopable{
         self.asset = asset
         super.init()
         
-        self.type = self.transformAssetType(for: asset)
-        if self.type == .video {
-            self.duration = self.transformDuration(for: asset)
-        }
     }
     
-    public func transformAssetType(for asset: PHAsset) -> ZLPhotoModel.MediaType {
-        switch asset.mediaType {
-        case .video:
-            return .video
-        case .image:
-            if (asset.value(forKey: "filename") as? String)?.hasSuffix("GIF") == true {
-                return .gif
-            }
-            if #available(iOS 9.1, *) {
-                if asset.mediaSubtypes == .photoLive || asset.mediaSubtypes.rawValue == 10 {
-                    return .livePhoto
-                }
-            }
-            return .image
-        default:
-            return .unknown
-        }
-    }
-    
+
     public func transformDuration(for asset: PHAsset) -> String {
         let dur = Int(round(asset.duration))
         
@@ -155,7 +115,7 @@ public func ==(lhs: ZLPhotoModel, rhs: ZLPhotoModel) -> Bool {
 
 
 protocol PropertyLoopable{
-    func allProperties() throws -> [String: Any]
+    var allProperties: [String: Any]? {get}
 }
 
 
@@ -163,15 +123,16 @@ protocol PropertyLoopable{
 
 
 extension PropertyLoopable{
-    func allProperties() throws -> [String: Any] {
+    
+    var allProperties: [String: Any]?{
 
-        var result: [String: Any] = [:]
+        var result = [String: Any]()
 
         let mirror = Mirror(reflecting: self)
 
         guard let style = mirror.displayStyle, style == .class || style == .struct else {
             //throw some error
-            throw NSError(domain: "hris.to", code: 777, userInfo: nil)
+            return nil
         }
 
         for (labelMaybe, valueMaybe) in mirror.children {
@@ -184,4 +145,7 @@ extension PropertyLoopable{
 
         return result
     }
+    
+    
 }
+

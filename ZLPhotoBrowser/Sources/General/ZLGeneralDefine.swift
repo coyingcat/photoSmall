@@ -162,27 +162,8 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewC
         }
         return false
     }
-    if currentSelectCount > 0 {
-        if !ZLPhotoConfiguration.default().allowMixSelect, model.type == .video {
-            return false
-        }
-    }
-    if model.type == .video {
-        if model.second > ZLPhotoConfiguration.default().maxSelectVideoDuration {
-            if showAlert {
-                let message = String(format: localLanguageTextValue(.longerThanMaxVideoDuration), ZLPhotoConfiguration.default().maxSelectVideoDuration)
-                showAlertView(message, sender)
-            }
-            return false
-        }
-        if model.second < ZLPhotoConfiguration.default().minSelectVideoDuration {
-            if showAlert {
-                let message = String(format: localLanguageTextValue(.shorterThanMaxVideoDuration), ZLPhotoConfiguration.default().minSelectVideoDuration)
-                showAlertView(message, sender)
-            }
-            return false
-        }
-    }
+
+
     return true
 }
 

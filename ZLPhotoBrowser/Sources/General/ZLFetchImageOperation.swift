@@ -110,17 +110,6 @@ class ZLFetchImageOperation: Operation {
             return
         }
         
-        if ZLPhotoConfiguration.default().allowSelectGif, self.model.type == .gif {
-            self.requestImageID = ZLPhotoManager.fetchOriginalImageData(for: self.model.asset) { [weak self] (data, _) in
-                
-                    let image = UIImage.zl_animateGifImage(data: data)
-                    self?.completion(image, nil)
-                    self?.fetchFinish()
-            }
-            
-            return
-        }
-        
         if self.isOriginal {
             self.requestImageID = ZLPhotoManager.fetchOriginalImage(for: self.model.asset, progress: self.progress) { [weak self] (image, isDegraded) in
                 if !isDegraded {

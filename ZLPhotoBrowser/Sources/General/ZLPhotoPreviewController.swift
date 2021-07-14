@@ -325,7 +325,7 @@ class ZLPhotoPreviewController: UIViewController {
         let config = ZLPhotoConfiguration.default()
         let currentModel = self.arrDataSources[self.currentIndex]
         
-        if (!config.allowMixSelect && currentModel.type == .video) || (!config.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
+        if (!config.showSelectBtnWhenSingleSelect && config.maxSelectCount == 1) {
             self.selectBtn.isHidden = true
         } else {
             self.selectBtn.isHidden = false
@@ -345,7 +345,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.refreshBottomViewFrame()
         
         if ZLPhotoConfiguration.default().allowSelectOriginal && ZLPhotoConfiguration.default().allowSelectImage {
-            self.originalBtn.isHidden = !((currentModel.type == .image) || (currentModel.type == .livePhoto && !config.allowSelectLivePhoto) || (currentModel.type == .gif && !config.allowSelectGif))
+         
         }
     }
     
@@ -399,7 +399,7 @@ class ZLPhotoPreviewController: UIViewController {
         let config = ZLPhotoConfiguration.default()
         let model = self.arrDataSources[self.currentIndex]
      
-        if model.type == .image || (!config.allowSelectGif && model.type == .gif) || (!config.allowSelectLivePhoto && model.type == .livePhoto) {
+       
         
             ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] (image, isDegraded) in
                 if !isDegraded {
@@ -410,7 +410,7 @@ class ZLPhotoPreviewController: UIViewController {
                     }
                 }
             }
-        }
+        
     }
     
     @objc func originalPhotoClick() {
@@ -559,29 +559,7 @@ extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionView
         
         let baseCell: ZLPreviewBaseCell
         
-        if config.allowSelectGif, model.type == .gif {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLGifPreviewCell.zl_identifier(), for: indexPath) as! ZLGifPreviewCell
-            
-            cell.singleTapBlock = { [weak self] in
-                self?.tapPreviewCell()
-            }
-            
-            cell.model = model
-            
-            baseCell = cell
-        } else if config.allowSelectLivePhoto, model.type == .livePhoto {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLLivePhotoPreviewCell.zl_identifier(), for: indexPath) as! ZLLivePhotoPreviewCell
-            
-            cell.model = model
-            
-            baseCell = cell
-        } else if config.allowSelectVideo, model.type == .video {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLVideoPreviewCell.zl_identifier(), for: indexPath) as! ZLVideoPreviewCell
-            
-            cell.model = model
-            
-            baseCell = cell
-        } else {
+   
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ZLPhotoPreviewCell.zl_identifier(), for: indexPath) as! ZLPhotoPreviewCell
 
             cell.singleTapBlock = { [weak self] in
@@ -591,7 +569,7 @@ extension ZLPhotoPreviewController: UICollectionViewDataSource, UICollectionView
             cell.model = model
 
             baseCell = cell
-        }
+        
         
         baseCell.singleTapBlock = { [weak self] in
             self?.tapPreviewCell()
@@ -885,19 +863,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
             PHImageManager.default().cancelImageRequest(self.imageRequestID)
         }
         
-        if self.model.type == .video {
-            self.tagImageView.isHidden = false
-            self.tagImageView.image = getImage("zl_video")
-            self.tagLabel.isHidden = true
-        } else if ZLPhotoConfiguration.default().allowSelectGif, self.model.type == .gif {
-            self.tagImageView.isHidden = true
-            self.tagLabel.isHidden = false
-            self.tagLabel.text = "GIF"
-        } else if ZLPhotoConfiguration.default().allowSelectLivePhoto, self.model.type == .livePhoto {
-            self.tagImageView.isHidden = false
-            self.tagImageView.image = getImage("zl_livePhoto")
-            self.tagLabel.isHidden = true
-        } else {
+ 
             if let _ =  self.model.editImage {
                 self.tagImageView.isHidden = false
                 self.tagImageView.image = getImage("zl_editImage_tag")
@@ -905,7 +871,7 @@ class ZLPhotoPreviewSelectedViewCell: UICollectionViewCell {
                 self.tagImageView.isHidden = true
                 self.tagLabel.isHidden = true
             }
-        }
+        
         
         self.imageIdentifier = self.model.ident
         self.imageView.image = nil

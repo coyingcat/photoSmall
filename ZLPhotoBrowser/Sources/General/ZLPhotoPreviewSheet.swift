@@ -472,21 +472,7 @@ public class ZLPhotoPreviewSheet: UIView {
             viewController?.dismiss(animated: true, completion: nil)
             return
         }
-        
-        let config = ZLPhotoConfiguration.default()
-        
-        if config.allowMixSelect {
-            let videoCount = self.arrSelectedModels.filter { $0.type == .video }.count
-            
-            if videoCount > config.maxVideoSelectCount {
-                showAlertView(String(format: localLanguageTextValue(.exceededMaxVideoSelectCount), ZLPhotoConfiguration.default().maxVideoSelectCount), viewController)
-                return
-            } else if videoCount < config.minVideoSelectCount {
-                showAlertView(String(format: localLanguageTextValue(.lessThanMinVideoSelectCount), ZLPhotoConfiguration.default().minVideoSelectCount), viewController)
-                return
-            }
-        }
-        
+    
         let callback = { [weak self] (sucImages: [UIImage], sucAssets: [PHAsset], errorAssets: [PHAsset], errorIndexs: [Int]) in
             
             if let vc = viewController {
@@ -622,7 +608,7 @@ public class ZLPhotoPreviewSheet: UIView {
         
         var canSelect = true
         // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
-        if !ZLPhotoConfiguration.default().allowMixSelect, newModel.type == .video {
+        if !ZLPhotoConfiguration.default().allowMixSelect {
             canSelect = false
         }
         if canSelect, canAddModel(newModel, currentSelectCount: self.arrSelectedModels.count, sender: self.sender, showAlert: false) {
@@ -795,20 +781,11 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
             let selCount = self.arrSelectedModels.count
             if selCount < config.maxSelectCount {
                 if config.allowMixSelect {
-                    let videoCount = self.arrSelectedModels.filter { $0.type == .video }.count
-                    if videoCount >= config.maxVideoSelectCount, model.type == .video {
-                        cell.coverView.backgroundColor = .invalidMaskColor
-                        cell.coverView.isHidden = !config.showInvalidMask
-                        cell.enableSelect = false
-                    } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
-                        cell.coverView.backgroundColor = .invalidMaskColor
-                        cell.coverView.isHidden = !config.showInvalidMask
-                        cell.enableSelect = false
-                    }
+
                 } else if selCount > 0 {
                     cell.coverView.backgroundColor = .invalidMaskColor
-                    cell.coverView.isHidden = (!config.showInvalidMask || model.type != .video)
-                    cell.enableSelect = model.type != .video
+                    cell.coverView.isHidden = (!config.showInvalidMask)
+                    
                 }
             } else if selCount >= config.maxSelectCount {
                 cell.coverView.backgroundColor = .invalidMaskColor

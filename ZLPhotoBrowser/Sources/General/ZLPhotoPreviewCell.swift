@@ -862,11 +862,9 @@ class ZLPreviewView: UIView {
         self.scrollView.zoomScale = 1
         self.imageIdentifier = self.model.ident
         
-        if ZLPhotoConfiguration.default().allowSelectGif, self.model.type == .gif {
-            self.loadGifFirstFrame()
-        } else {
+    
             self.loadPhoto()
-        }
+        
     }
     
     func requestPhotoSize(gif: Bool) -> CGSize {
@@ -1030,26 +1028,11 @@ class ZLPreviewView: UIView {
     }
     
     func resumeGif() {
-        guard let m = self.model else { return }
-        guard ZLPhotoConfiguration.default().allowSelectGif && m.type == .gif else { return }
-        guard self.imageView.layer.speed != 1 else { return }
         
-        let pauseTime = self.imageView.layer.timeOffset
-        self.imageView.layer.speed = 1
-        self.imageView.layer.timeOffset = 0
-        self.imageView.layer.beginTime = 0
-        let timeSincePause = self.imageView.layer.convertTime(CACurrentMediaTime(), from: nil) - pauseTime
-        self.imageView.layer.beginTime = timeSincePause
     }
     
     func pauseGif() {
-        guard let m = self.model else { return }
-        guard ZLPhotoConfiguration.default().allowSelectGif && m.type == .gif else { return }
-        guard self.imageView.layer.speed != 0 else { return }
-        
-        let pauseTime = self.imageView.layer.convertTime(CACurrentMediaTime(), from: nil)
-        self.imageView.layer.speed = 0
-        self.imageView.layer.timeOffset = pauseTime
+    
     }
     
 }
