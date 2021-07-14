@@ -137,7 +137,7 @@ class ViewController: UIViewController {
         }
         
         if preview {
-            ac.showPreview(animate: true, sender: self)
+            ac.showPreview(sender: self)
         } else {
             ac.showPhotoLibrary(sender: self)
         }

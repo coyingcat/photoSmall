@@ -210,8 +210,8 @@ public class ZLPhotoPreviewSheet: UIView {
         return true
     }
     
-    @objc public func showPreview(animate: Bool = true, sender: UIViewController) {
-        self.show(preview: true, animate: animate, sender: sender)
+    @objc public func showPreview(sender: UIViewController) {
+        self.show(preview: true, animate: true, sender: sender)
     }
     
     @objc public func showPhotoLibrary(sender: UIViewController) {
@@ -232,13 +232,18 @@ public class ZLPhotoPreviewSheet: UIView {
         self.isHidden = true
         self.sender?.view.addSubview(self)
         
-        let vc = ZLPhotoPreviewController(photos: models, index: index)
-        vc.autoSelectCurrentIfNotSelectAnyone = false
-        let nav = self.getImageNav(rootViewController: vc)
-        vc.backBlockGg = { [weak self] in
-            self?.hide()
+
+        if models.count > 0{
+            showEditImageVC(model: models[0])
         }
-        self.sender?.showDetailViewController(nav, sender: nil)
+        
+        
+        
+        
+        
+        
+        
+        
     }
     
     func show(preview: Bool, animate: Bool, sender: UIViewController) {
