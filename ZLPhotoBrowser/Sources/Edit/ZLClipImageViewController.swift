@@ -38,9 +38,6 @@ class ZLClipImageViewController: UIViewController {
     /// 用作进入裁剪界面首次动画和取消裁剪时动画的image
     var presentAnimateImage: UIImage?
     
-    /// 取消裁剪时动画frame
-    var cancelClipAnimateFrame: CGRect = .zero
-    
     var viewDidAppearCount = 0
     
 
@@ -93,10 +90,6 @@ class ZLClipImageViewController: UIViewController {
     
     var minClipSize = CGSize(width: 45, height: 45)
     
-    var dismissAnimateFromRect: CGRect = .zero
-    
-    var dismissAnimateImage: UIImage? = nil
-    
     /// 传回旋转角度，图片编辑区域的rect
     var clipDoneBlockZz: ( (CGFloat, CGRect) -> Void )?
     
@@ -127,7 +120,7 @@ class ZLClipImageViewController: UIViewController {
       
         super.init(nibName: nil, bundle: nil)
 
-            self.calculateClipRect()
+        self.editRect = CGRect(origin: .zero, size: self.editImage.size)
         
     }
     
@@ -158,7 +151,6 @@ class ZLClipImageViewController: UIViewController {
             animateImageView.frame = frame
             self.view.addSubview(animateImageView)
             
-            self.cancelClipAnimateFrame = self.clipBoxFrame
             UIView.animate(withDuration: 0.25, animations: {
                 animateImageView.frame = self.clipBoxFrame
                 self.bottomToolView.alpha = 1
@@ -270,14 +262,7 @@ class ZLClipImageViewController: UIViewController {
         self.rotateBtn.alpha = 0
     }
     
-    
-    func calculateClipRect() {
-       
-            
-            print("aaaa  aaaaa    aa")
-            self.editRect = CGRect(origin: .zero, size: self.editImage.size)
-       
-    }
+
     
     func layoutInitialImage() {
         self.scrollView.minimumZoomScale = 1
@@ -370,8 +355,7 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc func cancelBtnClick() {
-        self.dismissAnimateFromRect = self.cancelClipAnimateFrame
-        self.dismissAnimateImage = self.presentAnimateImage
+
         self.cancelClipBlockQq?()
         self.dismiss(animated: true, completion: nil)
     }
@@ -380,8 +364,7 @@ class ZLClipImageViewController: UIViewController {
     
     @objc func doneBtnClick() {
         let image = self.clipImage()
-        self.dismissAnimateFromRect = self.clipBoxFrame
-        self.dismissAnimateImage = image.clipImage
+   
         self.clipDoneBlockZz?(self.angle, image.editRect)
         self.dismiss(animated: true, completion: nil)
     }
