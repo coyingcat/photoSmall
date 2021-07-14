@@ -626,10 +626,7 @@ public class ZLPhotoPreviewSheet: UIView {
             canSelect = false
         }
         if canSelect, canAddModel(newModel, currentSelectCount: self.arrSelectedModels.count, sender: self.sender, showAlert: false) {
-            if !self.shouldDirectEdit(newModel) {
-                newModel.isSelected = true
-                self.arrSelectedModels.append(newModel)
-            }
+         
         }
         
         let insertIndexPath = IndexPath(row: 0, section: 0)
@@ -682,12 +679,7 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
                 guard canAddModel(model, currentSelectCount: self.arrSelectedModels.count, sender: self.sender) else {
                     return
                 }
-                if !self.shouldDirectEdit(model) {
-                    model.isSelected = true
-                    self.arrSelectedModels.append(model)
-                    cell?.btnSelect.isSelected = true
-                    self.refreshCellIndex()
-                }
+                
             } else {
                 cell?.btnSelect.isSelected = false
                 model.isSelected = false
@@ -738,37 +730,11 @@ extension ZLPhotoPreviewSheet: UICollectionViewDataSource, UICollectionViewDeleg
         }
         let model = self.arrDataSources[indexPath.row]
         
-        if self.shouldDirectEdit(model) {
-            return
-        }
-        let config = ZLPhotoConfiguration.default()
-  
-        
-        ZLPhotoManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { [weak self] (cameraRoll) in
-            guard let `self` = self else {
-          
-                return
-            }
-            var totalPhotos = ZLPhotoManager.fetchPhoto(in: cameraRoll.result, ascending: config.sortAscending, allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo)
-            markSelected(source: &totalPhotos, selected: &self.arrSelectedModels)
-            let defaultIndex = config.sortAscending ? totalPhotos.count - 1 : 0
-            var index: Int?
-            // last和first效果一样，只是排序方式不同时候分别从前后开始查找可以更快命中
-            if config.sortAscending {
-                index = totalPhotos.lastIndex { $0 == model }
-            } else {
-                index = totalPhotos.firstIndex { $0 == model }
-            }
-      
-            
-            self.showPreviewController(totalPhotos, index: index ?? defaultIndex)
-        }
+        showEditImageVC(model: model)
+       
     }
     
-    func shouldDirectEdit(_ model: ZLPhotoModel) -> Bool {
-        showEditImageVC(model: model)
-        return true
-    }
+
     
     func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int) {
         guard ZLPhotoConfiguration.default().showSelectedIndex else {
