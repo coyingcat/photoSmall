@@ -72,14 +72,6 @@ class ViewController: UIViewController {
             make.top.equalTo(previewSelectBtn.snp.bottom).offset(20)
         }
         
-        let previewLocalAndNetImageBtn = createBtn("Preview local and net image", #selector(previewLocalAndNetImage))
-        self.view.addSubview(previewLocalAndNetImageBtn)
-        previewLocalAndNetImageBtn.snp.makeConstraints { (make) in
-            make.left.equalTo(cameraBtn.snp.right).offset(20)
-            make.centerY.equalTo(cameraBtn)
-        }
-        
-
         
         let takeLabel = UILabel()
         takeLabel.font = UIFont.systemFont(ofSize: 14)
@@ -161,10 +153,6 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func previewLocalAndNetImage() {
-      
-    }
-    
     @objc func showCamera() {
         let camera = ZLCustomCamera()
         camera.takeDoneBlockX = { [weak self] (image) in
@@ -235,7 +223,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.selectedImages.count
+        return min(1, self.selectedImages.count)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
