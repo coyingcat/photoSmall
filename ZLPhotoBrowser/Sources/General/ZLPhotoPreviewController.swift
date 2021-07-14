@@ -72,7 +72,7 @@ class ZLPhotoPreviewController: UIViewController {
     var autoSelectCurrentIfNotSelectAnyone = true
     
     /// 界面消失时，通知上个界面刷新（针对预览视图）
-    var backBlock: ( () -> Void )?
+    var backBlockGg: ( () -> Void )?
     
     var orientation: UIInterfaceOrientation = .unknown
     
@@ -209,7 +209,6 @@ class ZLPhotoPreviewController: UIViewController {
     
     func setupUI() {
         self.view.backgroundColor = .black
-        self.automaticallyAdjustsScrollViewInsets = false
         
         let config = ZLPhotoConfiguration.default()
         // nav view
@@ -367,7 +366,7 @@ class ZLPhotoPreviewController: UIViewController {
     // MARK: btn actions
     
     @objc func backBtnClick() {
-        self.backBlock?()
+        self.backBlockGg?()
         let vc = self.navigationController?.popViewController(animated: true)
         if vc == nil {
             self.navigationController?.dismiss(animated: true, completion: nil)
@@ -477,7 +476,7 @@ class ZLPhotoPreviewController: UIViewController {
     func showEditImageVC(image: UIImage) {
         let model = self.arrDataSources[self.currentIndex]
         let nav = self.navigationController as! ZLImageNavController
-        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image, editModel: model.editImageModel) { [weak self, weak nav] (ei, editImageModel) in
+        ZLEditImageViewController.showEditImageVC_(parentVC: self, image: image, editModel: model.editImageModel) { [weak self, weak nav] (ei, editImageModel) in
             guard let `self` = self else { return }
             model.editImage = ei
             model.editImageModel = editImageModel

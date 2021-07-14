@@ -594,7 +594,7 @@ public class ZLCustomCamera: UIViewController, CAAnimationDelegate {
         guard let image = self.takedImage else {
             return
         }
-        ZLEditImageViewController.showEditImageVC(parentVC: self, image: image) { [weak self] (ei, _) in
+        ZLEditImageViewController.showEditImageVC_(parentVC: self, image: image) { [weak self] (ei, _) in
             self?.takedImage = ei
             self?.takedImageView.image = ei
         }

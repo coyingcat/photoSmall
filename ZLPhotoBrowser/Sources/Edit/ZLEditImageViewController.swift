@@ -107,15 +107,15 @@ public class ZLEditImageViewController: UIViewController {
         return .portrait
     }
     
-    @objc public class func showEditImageVC(parentVC: UIViewController?, animate: Bool = false, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel?) -> Void )? ) {
+    @objc public class func showEditImageVC_(parentVC: UIViewController?, image: UIImage, editModel: ZLEditImageModel? = nil, completionAa: ( (UIImage, ZLEditImageModel?) -> Void )? ) {
       
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0)
-            vc.clipDoneBlock = { (angle, editRect) in
+            vc.clipDoneBlockZz = { (angle, editRect) in
                 let m = ZLEditImageModel(editRect: editRect, angle: angle)
-                completion?(image.clipImage(angle, editRect) ?? image, m)
+                completionAa?(image.clipImage(angle, editRect) ?? image, m)
             }
             vc.modalPresentationStyle = .fullScreen
-            parentVC?.present(vc, animated: animate, completion: nil)
+            parentVC?.present(vc, animated: true, completion: nil)
        
     }
     
@@ -304,7 +304,7 @@ public class ZLEditImageViewController: UIViewController {
         vc.presentAnimateImage = currentEditImage.clipImage(self.angle, self.editRect)
         vc.modalPresentationStyle = .fullScreen
         
-        vc.clipDoneBlock = { [weak self] (angle, editFrame) in
+        vc.clipDoneBlockZz = { [weak self] (angle, editFrame) in
             guard let `self` = self else { return }
         
             if self.angle != angle {
@@ -316,7 +316,7 @@ public class ZLEditImageViewController: UIViewController {
          
         }
         
-        vc.cancelClipBlock = { [weak self] () in
+        vc.cancelClipBlockQq = { [weak self] () in
             self?.resetContainerViewFrame()
         }
         

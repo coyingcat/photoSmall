@@ -99,9 +99,9 @@ class ZLClipImageViewController: UIViewController {
     var dismissAnimateImage: UIImage? = nil
     
     /// 传回旋转角度，图片编辑区域的rect
-    var clipDoneBlock: ( (CGFloat, CGRect) -> Void )?
+    var clipDoneBlockZz: ( (CGFloat, CGRect) -> Void )?
     
-    var cancelClipBlock: ( () -> Void )?
+    var cancelClipBlockQq: ( () -> Void )?
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -389,7 +389,7 @@ class ZLClipImageViewController: UIViewController {
     @objc func cancelBtnClick() {
         self.dismissAnimateFromRect = self.cancelClipAnimateFrame
         self.dismissAnimateImage = self.presentAnimateImage
-        self.cancelClipBlock?()
+        self.cancelClipBlockQq?()
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -399,7 +399,7 @@ class ZLClipImageViewController: UIViewController {
         let image = self.clipImage()
         self.dismissAnimateFromRect = self.clipBoxFrame
         self.dismissAnimateImage = image.clipImage
-        self.clipDoneBlock?(self.angle, image.editRect)
+        self.clipDoneBlockZz?(self.angle, image.editRect)
         self.dismiss(animated: true, completion: nil)
     }
     

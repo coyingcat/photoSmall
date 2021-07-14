@@ -251,7 +251,7 @@ public class ZLPhotoPreviewSheet: UIView {
         let vc = ZLPhotoPreviewController(photos: models, index: index)
         vc.autoSelectCurrentIfNotSelectAnyone = false
         let nav = self.getImageNav(rootViewController: vc)
-        vc.backBlock = { [weak self] in
+        vc.backBlockGg = { [weak self] in
             self?.hide()
         }
         self.sender?.showDetailViewController(nav, sender: nil)
@@ -550,7 +550,7 @@ public class ZLPhotoPreviewSheet: UIView {
     func showPreviewController(_ models: [ZLPhotoModel], index: Int) {
         let vc = ZLPhotoPreviewController(photos: models, index: index)
         let nav = self.getImageNav(rootViewController: vc)
-        vc.backBlock = { [weak self, weak nav] in
+        vc.backBlockGg = { [weak self, weak nav] in
             guard let `self` = self else { return }
             self.isSelectOriginal = nav?.isSelectedOriginal ?? false
             self.arrSelectedModels.removeAll()
@@ -568,7 +568,7 @@ public class ZLPhotoPreviewSheet: UIView {
         ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] (image, isDegraded) in
             if !isDegraded {
                 if let image = image {
-                    ZLEditImageViewController.showEditImageVC(parentVC: self?.sender, image: image, editModel: model.editImageModel) { [weak self] (ei, editImageModel) in
+                    ZLEditImageViewController.showEditImageVC_(parentVC: self?.sender, image: image, editModel: model.editImageModel) { [weak self] (ei, editImageModel) in
                         model.isSelected = true
                         model.editImage = ei
                         model.editImageModel = editImageModel
