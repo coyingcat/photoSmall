@@ -19,8 +19,6 @@ class ViewController: UIViewController {
     
     var isOriginal = false
     
-    var takeSelectedAssetsSwitch: UISwitch!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -83,14 +81,6 @@ class ViewController: UIViewController {
             make.top.equalTo(cameraBtn.snp.bottom).offset(20)
         }
         
-        self.takeSelectedAssetsSwitch = UISwitch()
-        self.takeSelectedAssetsSwitch.isOn = false
-        self.view.addSubview(self.takeSelectedAssetsSwitch)
-        self.takeSelectedAssetsSwitch.snp.makeConstraints { (make) in
-            make.left.equalTo(takeLabel.snp.right).offset(20)
-            make.centerY.equalTo(takeLabel.snp.centerY)
-        }
-        
         let layout = UICollectionViewFlowLayout()
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         self.collectionView.backgroundColor = .clear
@@ -137,7 +127,7 @@ class ViewController: UIViewController {
             }
         }
         
-        let ac = ZLPhotoPreviewSheet(selectedAssets: self.takeSelectedAssetsSwitch.isOn ? self.selectedAssets : [])
+        let ac = ZLPhotoPreviewSheet(selectedAssets: [])
         ac.selectImageBlockOo = { [weak self] (images, assets, isOriginal) in
             self?.selectedImages = images
             self?.selectedAssets = assets
