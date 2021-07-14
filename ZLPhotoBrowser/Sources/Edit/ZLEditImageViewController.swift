@@ -108,8 +108,7 @@ public class ZLEditImageViewController: UIViewController {
     }
     
     @objc public class func showEditImageVC(parentVC: UIViewController?, animate: Bool = false, image: UIImage, editModel: ZLEditImageModel? = nil, completion: ( (UIImage, ZLEditImageModel?) -> Void )? ) {
-        let tools = ZLPhotoConfiguration.default().editImageTools
-        if ZLPhotoConfiguration.default().showClipDirectlyIfOnlyHasClipTool, tools.count == 1, tools.contains(.clip) {
+      
             let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0)
             vc.clipDoneBlock = { (angle, editRect) in
                 let m = ZLEditImageModel(editRect: editRect, angle: angle)
@@ -117,14 +116,7 @@ public class ZLEditImageViewController: UIViewController {
             }
             vc.modalPresentationStyle = .fullScreen
             parentVC?.present(vc, animated: animate, completion: nil)
-        } else {
-            let vc = ZLEditImageViewController(image: image, editModel: editModel)
-            vc.editFinishBlockXx = {  (ei, editImageModel) in
-                completion?(ei, editImageModel)
-            }
-            vc.modalPresentationStyle = .fullScreen
-            parentVC?.present(vc, animated: animate, completion: nil)
-        }
+       
     }
     
     @objc public init(image: UIImage, editModel: ZLEditImageModel? = nil) {
