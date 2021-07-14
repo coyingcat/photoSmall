@@ -395,7 +395,7 @@ public class ZLPhotoPreviewSheet: UIView {
     @objc func photoLibraryBtnClick() {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
 
-        self.showThumbnailViewController()
+        
     }
     
     @objc func cancelBtnClick() {
@@ -564,21 +564,7 @@ public class ZLPhotoPreviewSheet: UIView {
         }
     }
     
-    func showThumbnailViewController() {
-        ZLPhotoManager.getCameraRollAlbum(allowSelectImage: ZLPhotoConfiguration.default().allowSelectImage, allowSelectVideo: ZLPhotoConfiguration.default().allowSelectVideo) { [weak self] (cameraRoll) in
-            guard let `self` = self else { return }
-            let nav: ZLImageNavController
-            if ZLPhotoConfiguration.default().style == .embedAlbumList {
-                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
-                nav = self.getImageNav(rootViewController: tvc)
-            } else {
-                nav = self.getImageNav(rootViewController: ZLAlbumListController())
-                let tvc = ZLThumbnailViewController(albumList: cameraRoll)
-                nav.pushViewController(tvc, animated: true)
-            }
-            self.sender?.showDetailViewController(nav, sender: nil)
-        }
-    }
+ 
     
     func showPreviewController(_ models: [ZLPhotoModel], index: Int) {
         let vc = ZLPhotoPreviewController(photos: models, index: index)

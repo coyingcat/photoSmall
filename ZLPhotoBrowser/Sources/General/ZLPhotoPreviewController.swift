@@ -68,8 +68,6 @@ class ZLPhotoPreviewController: UIViewController {
     
     var hideNavView = false
     
-    var popInteractiveTransition: ZLPhotoPreviewPopInteractiveTransition?
-    
     /// 是否在点击确定时候，当未选择任何照片时候，自动选择当前index的照片
     var autoSelectCurrentIfNotSelectAnyone = true
     
@@ -111,7 +109,6 @@ class ZLPhotoPreviewController: UIViewController {
         
         self.setupUI()
         
-        self.addPopInteractiveTransition()
         self.resetSubViewStatus()
         
         editBtnClick()
@@ -124,7 +121,6 @@ class ZLPhotoPreviewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.delegate = self
         
         guard self.isFirstAppear else { return }
         self.isFirstAppear = false
@@ -325,55 +321,7 @@ class ZLPhotoPreviewController: UIViewController {
         self.view.bringSubviewToFront(self.navView)
     }
     
-    func addPopInteractiveTransition() {
-        guard (self.navigationController?.viewControllers.count ?? 0 ) > 1 else {
-            // 仅有当前vc一个时候，说明不是从相册进入，不添加交互动画
-            return
-        }
-        self.popInteractiveTransition = ZLPhotoPreviewPopInteractiveTransition(viewController: self)
-        self.popInteractiveTransition?.shouldStartTransition = { [weak self] (point) -> Bool in
-            guard let `self` = self else { return false }
-            if !self.hideNavView && (self.navView.frame.contains(point) || self.bottomView.frame.contains(point)) {
-                return false
-            }
-            return true
-        }
-        self.popInteractiveTransition?.startTransition = { [weak self] in
-            guard let `self` = self else { return }
-            
-            self.navView.alpha = 0
-            self.bottomView.alpha = 0
-            
-            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) else {
-                return
-            }
-            if cell is ZLVideoPreviewCell {
-                (cell as! ZLVideoPreviewCell).pauseWhileTransition()
-            } else if cell is ZLLivePhotoPreviewCell {
-                (cell as! ZLLivePhotoPreviewCell).livePhotoView.stopPlayback()
-            } else if cell is ZLGifPreviewCell {
-                (cell as! ZLGifPreviewCell).pauseGif()
-            }
-        }
-        self.popInteractiveTransition?.cancelTransition = { [weak self] in
-            guard let `self` = self else { return }
-            
-            self.hideNavView = false
-            self.navView.isHidden = false
-            self.bottomView.isHidden = false
-            UIView.animate(withDuration: 0.5) {
-                self.navView.alpha = 1
-                self.bottomView.alpha = 1
-            }
-            
-            guard let cell = self.collectionView.cellForItem(at: IndexPath(row: self.currentIndex, section: 0)) else {
-                return
-            }
-            if cell is ZLGifPreviewCell {
-                (cell as! ZLGifPreviewCell).resumeGif()
-            }
-        }
-    }
+ 
     
     func resetSubViewStatus() {
         let nav = self.navigationController as! ZLImageNavController
@@ -547,27 +495,11 @@ class ZLPhotoPreviewController: UIViewController {
         }
     }
     
-    func showEditVideoVC(model: ZLPhotoModel, avAsset: AVAsset) {
-   
-    }
     
 }
 
 
-extension ZLPhotoPreviewController: UINavigationControllerDelegate {
-    
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        if operation == .push {
-            return nil
-        }
-        return self.popInteractiveTransition?.interactive == true ? ZLPhotoPreviewAnimatedTransition() : nil
-    }
-    
-    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self.popInteractiveTransition?.interactive == true ? self.popInteractiveTransition : nil
-    }
-    
-}
+
 
 
 // scroll view delegate

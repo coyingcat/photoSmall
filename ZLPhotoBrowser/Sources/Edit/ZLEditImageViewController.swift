@@ -97,7 +97,7 @@ public class ZLEditImageViewController: UIViewController {
         return self.originalImage.size
     }
     
-    @objc public var editFinishBlock: ( (UIImage, ZLEditImageModel?) -> Void )?
+    @objc public var editFinishBlockXx: ( (UIImage, ZLEditImageModel?) -> Void )?
     
     public override var prefersStatusBarHidden: Bool {
         return true
@@ -119,7 +119,7 @@ public class ZLEditImageViewController: UIViewController {
             parentVC?.present(vc, animated: animate, completion: nil)
         } else {
             let vc = ZLEditImageViewController(image: image, editModel: editModel)
-            vc.editFinishBlock = {  (ei, editImageModel) in
+            vc.editFinishBlockXx = {  (ei, editImageModel) in
                 completion?(ei, editImageModel)
             }
             vc.modalPresentationStyle = .fullScreen
@@ -350,7 +350,7 @@ public class ZLEditImageViewController: UIViewController {
             resImage = resImage.clipImage(self.angle, self.editRect) ?? resImage
             editModel = ZLEditImageModel(editRect: self.editRect, angle: self.angle)
         }
-        self.editFinishBlock?(resImage, editModel)
+        self.editFinishBlockXx?(resImage, editModel)
         
         self.dismiss(animated: false, completion: nil)
     }
