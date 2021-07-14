@@ -451,13 +451,25 @@ public class ZLPhotoPreviewSheet: UIView {
         ZLPhotoManager.fetchImage(for: model.asset, size: model.previewSize) { [weak self] (image, isDegraded) in
             if !isDegraded {
                 if let image = image {
-                    ZLEditImageViewController.showEditImageVC_(parentVC: self?.sender, image: image, editModel: model.editImageModel) { [weak self] (ei, editImageModel) in
-                        model.isSelected = true
-                        model.editImage = ei
-                        model.editImageModel = editImageModel
-                        self?.arrSelectedModels.append(model)
-                        self?.requestSelectPhoto()
+                    let editModel = model.editImageModel
+              
+                    let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0)
+                    vc.clipDoneBlockZz = { [weak self]  (angle, editRect) in
+          
+                        
+                        let ei = image.clipImage(angle, editRect) ?? image
+                        let editImageModel = ZLEditImageModel(editRect: editRect, angle: angle)
+                  
+                            model.isSelected = true
+                            model.editImage = ei
+                            model.editImageModel = editImageModel
+                            self?.arrSelectedModels.append(model)
+                            self?.requestSelectPhoto()
                     }
+                    vc.modalPresentationStyle = .fullScreen
+                    self?.sender?.present(vc, animated: true, completion: nil)
+                    
+                    
                 } else {
                     showAlertView(localLanguageTextValue(.imageLoadFailed), self?.sender)
                 }
