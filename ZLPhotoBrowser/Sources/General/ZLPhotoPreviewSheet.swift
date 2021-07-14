@@ -59,19 +59,9 @@ public class ZLPhotoPreviewSheet: UIView {
     
     private var preview = false
     
-    private var senderTabBarIsHidden: Bool?
-    
     private var baseViewHeight: CGFloat = 0
     
     private var isSelectOriginal = false
-    
-    private var panBeginPoint: CGPoint = .zero
-    
-    private var panImageView: UIImageView?
-    
-    private var panModel: ZLPhotoModel?
-    
-    private var panCell: ZLThumbnailPhotoCell?
     
     private weak var sender: UIViewController?
     
@@ -312,12 +302,7 @@ public class ZLPhotoPreviewSheet: UIView {
         if self.superview == nil {
             self.sender?.view.addSubview(self)
         }
-        
-        if let tabBar = self.sender?.tabBarController?.tabBar, !tabBar.isHidden {
-            self.senderTabBarIsHidden = tabBar.isHidden
-            tabBar.isHidden =  true
-        }
-        
+
     }
     
     func hide(completion: ( () -> Void )? = nil) {
@@ -325,11 +310,6 @@ public class ZLPhotoPreviewSheet: UIView {
             self.isHidden = true
             completion?()
             self.removeFromSuperview()
-        
-        
-        if let temp = self.senderTabBarIsHidden {
-            self.sender?.tabBarController?.tabBar.isHidden = temp
-        }
     }
     
     func showNoAuthorityAlert() {
