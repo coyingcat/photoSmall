@@ -435,10 +435,10 @@ class ZLPhotoPreviewController: UIViewController {
             }
             
             if !nav.arrSelectedModels.isEmpty {
-                nav.selectImageBlock?()
+                nav.selectImageBlockX?()
             }
         } else {
-            nav.selectImageBlock?()
+            nav.selectImageBlockX?()
         }
     }
     
