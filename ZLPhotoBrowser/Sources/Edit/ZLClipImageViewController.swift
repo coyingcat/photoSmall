@@ -221,7 +221,7 @@ class ZLClipImageViewController: UIViewController {
     
     func layoutInitialImage() {
         self.scrollView.minimumZoomScale = 1
-        self.scrollView.maximumZoomScale = 1
+
         self.scrollView.zoomScale = 1
         
         let editSize = self.editRect.size
@@ -249,7 +249,7 @@ class ZLClipImageViewController: UIViewController {
         let clipRectZoomScale = min(maxClipRect.width/scaleEditSize.width, maxClipRect.height/scaleEditSize.height)
         
         self.scrollView.minimumZoomScale = originalScale
-        self.scrollView.maximumZoomScale = 10
+
         // 设置当前zoom scale
         let zoomScale = (clipRectZoomScale * originalScale)
         self.scrollView.zoomScale = zoomScale
