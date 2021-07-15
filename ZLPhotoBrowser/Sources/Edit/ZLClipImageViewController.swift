@@ -34,10 +34,6 @@ class ZLClipImageViewController: UIViewController {
     
     var editImage: UIImage
     
-    /// 初次进入界面时候，裁剪范围
-    var editRect: CGRect
-    
-    
     var containerView: UIView!
     
     var imageView: UIImageView!
@@ -94,8 +90,6 @@ class ZLClipImageViewController: UIViewController {
 
     
     init(image: UIImage, editRect: CGRect?, angle: CGFloat = 0) {
-
-        self.editRect = editRect ?? .zero
         self.angle = angle
         if angle == -90 {
             self.editImage = image.rotate(orientation: .left)
@@ -108,9 +102,6 @@ class ZLClipImageViewController: UIViewController {
         }
       
         super.init(nibName: nil, bundle: nil)
-
-        self.editRect = CGRect(origin: .zero, size: self.editImage.size)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -207,27 +198,13 @@ class ZLClipImageViewController: UIViewController {
     func layoutInitialImage(){
 
   
-        let editSize = self.editRect.size
-    
         let maxClipRect = self.maxClipFrame
         
         self.imageView.frame = self.containerView.bounds
         
         // editRect比例，计算editRect所占frame
-        let editScale = min(maxClipRect.width/editSize.width, maxClipRect.height/editSize.height)
-        let scaledSize = CGSize(width: floor(editSize.width * editScale), height: floor(editSize.height * editScale))
-        
-        var frame = CGRect.zero
-        frame.size = scaledSize
-        frame.origin.x = maxClipRect.minX + floor((maxClipRect.width-frame.width) / 2)
-        frame.origin.y = maxClipRect.minY + floor((maxClipRect.height-frame.height) / 2)
-        
-        // 按照edit image进行计算最小缩放比例
-        let originalScale = min(maxClipRect.width/self.editImage.size.width, maxClipRect.height/self.editImage.size.height)
-        // 将 edit rect 相对 originalScale 进行缩放，缩放到图片未放大时候的clip rect
-        let scaleEditSize = CGSize(width: self.editRect.width * originalScale, height: self.editRect.height * originalScale)
-        // 计算缩放后的clip rect相对maxClipRect的比例
    
+    
 
     }
     
