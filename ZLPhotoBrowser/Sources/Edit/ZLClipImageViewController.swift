@@ -32,15 +32,7 @@ class ZLClipImageViewController: UIViewController {
     
     static let clipRatioItemSize: CGSize = CGSize(width: 60, height: 70)
     
-    /// 用作进入裁剪界面首次动画frame
-    var presentAnimateFrame: CGRect?
-    
-    /// 用作进入裁剪界面首次动画和取消裁剪时动画的image
-    var presentAnimateImage: UIImage?
-    
     var viewDidAppearCount = 0
-    
-
     
     var editImage: UIImage
     
@@ -144,36 +136,13 @@ class ZLClipImageViewController: UIViewController {
             return
         }
         
-        if let frame = self.presentAnimateFrame, let image = self.presentAnimateImage {
-            
-            print("xxxxxxxx xxx xx ")
-            
-            let animateImageView = UIImageView(image: image)
-            animateImageView.contentMode = .scaleAspectFill
-            animateImageView.clipsToBounds = true
-            animateImageView.frame = frame
-            self.view.addSubview(animateImageView)
-            
-            UIView.animate(withDuration: 0.25, animations: {
-                animateImageView.frame = self.clipBoxFrame
-                self.bottomToolView.alpha = 1
-                self.rotateBtn.alpha = 1
-            }) { (_) in
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.scrollView.alpha = 1
-                }) { (_) in
-                    animateImageView.removeFromSuperview()
-                }
-            }
-        } else {
-            
             print("xxxxxxxx xxx xx gggg gg gg ")
             
             
             self.bottomToolView.alpha = 1
             self.rotateBtn.alpha = 1
             self.scrollView.alpha = 1
-        }
+        
     }
     
     override func viewDidLayoutSubviews() {
