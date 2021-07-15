@@ -157,10 +157,10 @@ class ZLClipImageViewController: UIViewController {
         self.view.backgroundColor = .black
         
         self.scrollView = UIScrollView()
-        self.scrollView.alwaysBounceVertical = true
-        self.scrollView.alwaysBounceHorizontal = true
-        self.scrollView.showsVerticalScrollIndicator = false
-        self.scrollView.showsHorizontalScrollIndicator = false
+        self.scrollView.alwaysBounceVertical = false
+        self.scrollView.alwaysBounceHorizontal = false
+        self.scrollView.showsVerticalScrollIndicator = true
+        self.scrollView.showsHorizontalScrollIndicator = true
         if #available(iOS 11.0, *) {
             self.scrollView.contentInsetAdjustmentBehavior = .never
         } else {
