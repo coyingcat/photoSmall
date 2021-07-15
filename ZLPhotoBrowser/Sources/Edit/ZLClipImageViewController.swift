@@ -145,6 +145,9 @@ class ZLClipImageViewController: UIViewController {
         }
         
         if let frame = self.presentAnimateFrame, let image = self.presentAnimateImage {
+            
+            print("xxxxxxxx xxx xx ")
+            
             let animateImageView = UIImageView(image: image)
             animateImageView.contentMode = .scaleAspectFill
             animateImageView.clipsToBounds = true
@@ -163,6 +166,10 @@ class ZLClipImageViewController: UIViewController {
                 }
             }
         } else {
+            
+            print("xxxxxxxx xxx xx gggg gg gg ")
+            
+            
             self.bottomToolView.alpha = 1
             self.rotateBtn.alpha = 1
             self.scrollView.alpha = 1
