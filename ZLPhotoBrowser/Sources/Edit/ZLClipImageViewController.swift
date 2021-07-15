@@ -124,6 +124,8 @@ class ZLClipImageViewController: UIViewController {
         self.view.backgroundColor = .black
         
         self.scrollView = UIScrollView()
+        scrollView.layer.borderWidth = 2
+        scrollView.layer.borderColor = UIColor.red.cgColor
         self.scrollView.alwaysBounceVertical = false
         self.scrollView.alwaysBounceHorizontal = false
         self.scrollView.showsVerticalScrollIndicator = true
