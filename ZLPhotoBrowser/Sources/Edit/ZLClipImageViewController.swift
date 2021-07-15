@@ -121,39 +121,6 @@ class ZLClipImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setupUI()
-    }
-    
- 
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        guard self.shouldLayout else {
-            return
-        }
-        self.shouldLayout = false
-        
-        self.scrollView.frame = self.view.bounds
-        
-        self.layoutInitialImage()
-        
-        self.bottomToolView.frame = CGRect(x: 0, y: self.view.bounds.height-ZLClipImageViewController.bottomToolViewH, width: self.view.bounds.width, height: ZLClipImageViewController.bottomToolViewH)
-        self.bottomShadowLayer.frame = self.bottomToolView.bounds
-        
-        self.bottomToolLineView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 1/UIScreen.main.scale)
-        let toolBtnH: CGFloat = 25
-        let toolBtnY = (ZLClipImageViewController.bottomToolViewH - toolBtnH) / 2 - 10
-        self.cancelBtn.frame = CGRect(x: 30, y: toolBtnY, width: toolBtnH, height: toolBtnH)
-      
-        self.doneBtn.frame = CGRect(x: self.view.bounds.width-30-toolBtnH, y: toolBtnY, width: toolBtnH, height: toolBtnH)
-        
-        let ratioColViewY = self.bottomToolView.frame.minY - ZLClipImageViewController.clipRatioItemSize.height - 5
-        self.rotateBtn.frame = CGRect(x: 30, y: ratioColViewY + (ZLClipImageViewController.clipRatioItemSize.height-25)/2, width: 25, height: 25)
-      
-    }
-    
-    func setupUI() {
         self.view.backgroundColor = .black
         
         self.scrollView = UIScrollView()
@@ -217,6 +184,36 @@ class ZLClipImageViewController: UIViewController {
 
     }
     
+ 
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard self.shouldLayout else {
+            return
+        }
+        self.shouldLayout = false
+        
+        self.scrollView.frame = self.view.bounds
+        
+        self.layoutInitialImage()
+        
+        self.bottomToolView.frame = CGRect(x: 0, y: self.view.bounds.height-ZLClipImageViewController.bottomToolViewH, width: self.view.bounds.width, height: ZLClipImageViewController.bottomToolViewH)
+        self.bottomShadowLayer.frame = self.bottomToolView.bounds
+        
+        self.bottomToolLineView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 1/UIScreen.main.scale)
+        let toolBtnH: CGFloat = 25
+        let toolBtnY = (ZLClipImageViewController.bottomToolViewH - toolBtnH) / 2 - 10
+        self.cancelBtn.frame = CGRect(x: 30, y: toolBtnY, width: toolBtnH, height: toolBtnH)
+      
+        self.doneBtn.frame = CGRect(x: self.view.bounds.width-30-toolBtnH, y: toolBtnY, width: toolBtnH, height: toolBtnH)
+        
+        let ratioColViewY = self.bottomToolView.frame.minY - ZLClipImageViewController.clipRatioItemSize.height - 5
+        self.rotateBtn.frame = CGRect(x: 30, y: ratioColViewY + (ZLClipImageViewController.clipRatioItemSize.height-25)/2, width: 25, height: 25)
+      
+    }
+    
+
 
     
     func layoutInitialImage() {
