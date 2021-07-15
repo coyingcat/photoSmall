@@ -80,7 +80,7 @@ class ZLClipImageViewController: UIViewController {
     var minClipSize = CGSize(width: 45, height: 45)
     
     /// 传回旋转角度，图片编辑区域的rect
-    var clipDoneBlockZz: ( (CGFloat, CGRect) -> Void )?
+    var clipDoneBlockZz: ( (CGFloat) -> Void )?
     
     var cancelClipBlockQq: ( () -> Void )?
     
@@ -242,7 +242,7 @@ class ZLClipImageViewController: UIViewController {
     
     @objc func doneBtnClick() {
 
-        self.clipDoneBlockZz?(self.angle, CGRect(origin: .zero, size: self.editImage.size))
+        self.clipDoneBlockZz?(self.angle)
         self.dismiss(animated: true, completion: nil)
     }
     

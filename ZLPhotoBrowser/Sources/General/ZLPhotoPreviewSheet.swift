@@ -454,11 +454,9 @@ public class ZLPhotoPreviewSheet: UIView {
                     let editModel = model.editImageModel
               
                     let vc = ZLClipImageViewController(image: image, editRect: editModel?.editRect, angle: editModel?.angle ?? 0)
-                    vc.clipDoneBlockZz = { [weak self]  (angle, editRect) in
-          
-                        
-                        let ei = image.clipImage(angle, editRect) ?? image
-                        let editImageModel = ZLEditImageModel(editRect: editRect, angle: angle)
+                    vc.clipDoneBlockZz = { [weak self]  (angle) in
+                        let ei = image.clipImage(angle) ?? image
+                        let editImageModel = ZLEditImageModel(editRect: CGRect.zero, angle: angle)
                   
                             model.isSelected = true
                             model.editImage = ei

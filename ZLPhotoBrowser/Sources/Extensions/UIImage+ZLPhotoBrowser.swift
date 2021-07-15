@@ -415,7 +415,7 @@ extension UIImage {
         return ci
     }
     
-    func clipImage(_ angle: CGFloat, _ editRect: CGRect) -> UIImage? {
+    func clipImage(_ angle: CGFloat) -> UIImage? {
         let a = ((Int(angle) % 360) - 360) % 360
         var newImage = self
         if a == -90 {
@@ -425,19 +425,7 @@ extension UIImage {
         } else if a == -270 {
             newImage = self.rotate(orientation: .right)
         }
-        guard editRect.size != newImage.size else {
-            return newImage
-        }
-        let origin = CGPoint(x: -editRect.minX, y: -editRect.minY)
-        UIGraphicsBeginImageContextWithOptions(editRect.size, false, newImage.scale)
-        newImage.draw(at: origin)
-        let temp = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let cgi = temp?.cgImage else {
-            return temp
-        }
-        let clipImage = UIImage(cgImage: cgi, scale: newImage.scale, orientation: .up)
-        return clipImage
+        return newImage
     }
     
     func blurImage(level: CGFloat) -> UIImage? {
