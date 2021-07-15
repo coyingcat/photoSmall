@@ -62,7 +62,7 @@ class ZLClipImageViewController: UIViewController {
     
     var clipOriginFrame: CGRect = .zero
     
-    var isRotating = false
+
     
     var angle: CGFloat = 0
     
@@ -316,24 +316,12 @@ class ZLClipImageViewController: UIViewController {
     }
     
     @objc func rotateBtnClick() {
-        guard !self.isRotating else {
-            return
-        }
+
         self.angle -= 90
         if self.angle == -360 {
             self.angle = 0
         }
         
-        self.isRotating = true
-        
-        let animateImageView = UIImageView(image: self.editImage)
-        animateImageView.contentMode = .scaleAspectFit
-        animateImageView.clipsToBounds = true
-        let originFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
-        animateImageView.frame = originFrame
-        self.view.addSubview(animateImageView)
-        
- 
             print("aaaa  aaaaa    xxxx")
             // 自由比例和1:1比例，进行edit rect转换
             
@@ -348,19 +336,7 @@ class ZLClipImageViewController: UIViewController {
         self.imageView.image = self.editImage
         self.layoutInitialImage()
         
-        let toFrame = self.view.convert(self.containerView.frame, from: self.scrollView)
-        let transform = CGAffineTransform(rotationAngle: -CGFloat.pi/2)
-
-        self.containerView.alpha = 0
-        UIView.animate(withDuration: 0.3, animations: {
-            animateImageView.transform = transform
-            animateImageView.frame = toFrame
-        }) { (_) in
-            animateImageView.removeFromSuperview()
-
-            self.containerView.alpha = 1
-            self.isRotating = false
-        }
+        self.containerView.alpha = 1
     }
 
     
