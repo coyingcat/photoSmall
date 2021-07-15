@@ -220,7 +220,6 @@ class ZLClipImageViewController: UIViewController {
 
     
     func layoutInitialImage() {
-        self.scrollView.minimumZoomScale = 1
 
         self.scrollView.zoomScale = 1
         
