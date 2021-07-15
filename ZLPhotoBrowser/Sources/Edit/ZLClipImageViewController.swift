@@ -253,13 +253,6 @@ class ZLClipImageViewController: UIViewController {
         
         self.changeClipBoxFrame(newFrame: frame)
         
-        if (frame.size.width < scaledSize.width - CGFloat.ulpOfOne) || (frame.size.height < scaledSize.height - CGFloat.ulpOfOne) {
-            var offset = CGPoint.zero
-            offset.x = -floor((self.scrollView.frame.width - scaledSize.width) / 2)
-            offset.y = -floor((self.scrollView.frame.height - scaledSize.height) / 2)
-            self.scrollView.contentOffset = offset
-        }
-        
         // edit rect 相对 image size 的 偏移量
         let diffX = self.editRect.origin.x / self.editImage.size.width * self.scrollView.contentSize.width
         let diffY = self.editRect.origin.y / self.editImage.size.height * self.scrollView.contentSize.height
@@ -335,8 +328,6 @@ class ZLClipImageViewController: UIViewController {
         
         self.imageView.image = self.editImage
         self.layoutInitialImage()
-        
-        self.containerView.alpha = 1
     }
 
     
