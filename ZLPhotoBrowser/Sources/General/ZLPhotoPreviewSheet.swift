@@ -477,24 +477,6 @@ public class ZLPhotoPreviewSheet: UIView {
         }
     }
     
-
-    
-    func getImageNav(rootViewController: UIViewController) -> ZLImageNavController {
-        let nav = ZLImageNavController(rootViewController: rootViewController)
-        nav.modalPresentationStyle = .fullScreen
-        nav.selectImageBlockX = { [weak self, weak nav] in
-            self?.isSelectOriginal = nav?.isSelectedOriginal ?? false
-            self?.arrSelectedModels.removeAll()
-            self?.arrSelectedModels.append(contentsOf: nav?.arrSelectedModels ?? [])
-            self?.requestSelectPhoto(viewController: nav)
-        }
-        
-        nav.isSelectedOriginal = self.isSelectOriginal
-        nav.arrSelectedModels.removeAll()
-        nav.arrSelectedModels.append(contentsOf: self.arrSelectedModels)
-        
-        return nav
-    }
     
     func saveX(image: UIImage?) {
    
