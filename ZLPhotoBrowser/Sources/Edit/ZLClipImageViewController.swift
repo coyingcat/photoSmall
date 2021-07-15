@@ -321,9 +321,8 @@ class ZLClipImageViewController: UIViewController {
 
     
     @objc func doneBtnClick() {
-        let image = self.clipImage()
-   
-        self.clipDoneBlockZz?(self.angle, image.editRect)
+
+        self.clipDoneBlockZz?(self.angle, CGRect(origin: .zero, size: self.editImage.size))
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -375,20 +374,6 @@ class ZLClipImageViewController: UIViewController {
         }
     }
 
-    func clipImage() -> (clipImage: UIImage, editRect: CGRect) {
-        let frame = self.convertClipRectToEditImageRect()
-        
-        let origin = CGPoint(x: -frame.minX, y: -frame.minY)
-        UIGraphicsBeginImageContextWithOptions(frame.size, false, self.editImage.scale)
-        self.editImage.draw(at: origin)
-        let temp = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        guard let cgi = temp?.cgImage else {
-            return (self.editImage, CGRect(origin: .zero, size: self.editImage.size))
-        }
-        let newImage = UIImage(cgImage: cgi, scale: self.editImage.scale, orientation: .up)
-        return (newImage, frame)
-    }
     
     func convertClipRectToEditImageRect() -> CGRect {
         let imageSize = self.editImage.size
