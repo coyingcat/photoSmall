@@ -32,8 +32,6 @@ class ZLClipImageViewController: UIViewController {
     
     static let clipRatioItemSize: CGSize = CGSize(width: 60, height: 70)
     
-    var viewDidAppearCount = 0
-    
     var editImage: UIImage
     
     /// 初次进入界面时候，裁剪范围
@@ -126,24 +124,7 @@ class ZLClipImageViewController: UIViewController {
         self.setupUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.viewDidAppearCount += 1
-
-        
-        guard self.viewDidAppearCount == 1 else {
-            return
-        }
-        
-            print("xxxxxxxx xxx xx gggg gg gg ")
-            
-            
-            self.bottomToolView.alpha = 1
-            self.rotateBtn.alpha = 1
-            self.scrollView.alpha = 1
-        
-    }
+ 
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -233,9 +214,7 @@ class ZLClipImageViewController: UIViewController {
         self.rotateBtn.addTarget(self, action: #selector(rotateBtnClick), for: .touchUpInside)
         self.view.addSubview(self.rotateBtn)
         
-        self.scrollView.alpha = 0
-        self.bottomToolView.alpha = 0
-        self.rotateBtn.alpha = 0
+
     }
     
 
