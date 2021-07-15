@@ -26,6 +26,10 @@
 
 import UIKit
 
+
+import AVFoundation
+
+
 class ZLClipImageViewController: UIViewController {
 
     static let bottomToolViewH: CGFloat = 90
@@ -198,12 +202,14 @@ class ZLClipImageViewController: UIViewController {
     func layoutInitialImage(){
 
   
-        let maxClipRect = self.maxClipFrame
+        var frame = containerView.frame
+        frame.origin.x = 10
+        frame.origin.y = 10
+        frame.size.width -= 20
+        frame.size.height -= 180
+        self.imageView.frame = AVMakeRect(aspectRatio: editImage.size, insideRect: frame)
         
-        self.imageView.frame = self.containerView.bounds
         
-        // editRect比例，计算editRect所占frame
-   
     
 
     }
