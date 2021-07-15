@@ -303,13 +303,6 @@ class ZLClipImageViewController: UIViewController {
         self.clipBoxFrame = frame
 
         self.scrollView.contentInset = UIEdgeInsets(top: frame.minY, left: frame.minX, bottom: self.scrollView.frame.maxY-frame.maxY, right: self.scrollView.frame.maxX-frame.maxX)
-        
-        let scale = max(frame.height/self.editImage.size.height, frame.width/self.editImage.size.width)
-        self.scrollView.minimumZoomScale = scale
-        
-
-        
-        self.scrollView.zoomScale = self.scrollView.zoomScale
     }
     
     @objc func cancelBtnClick() {
