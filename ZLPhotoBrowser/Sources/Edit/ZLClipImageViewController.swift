@@ -229,6 +229,7 @@ class ZLClipImageViewController: UIViewController {
         let maxClipRect = self.maxClipFrame
         
         self.containerView.frame = CGRect(origin: .zero, size: self.editImage.size)
+        print("aaaa, \(containerView.frame)")
         self.imageView.frame = self.containerView.bounds
         
         // editRect比例，计算editRect所占frame
@@ -267,6 +268,8 @@ class ZLClipImageViewController: UIViewController {
         let diffX = self.editRect.origin.x / self.editImage.size.width * self.scrollView.contentSize.width
         let diffY = self.editRect.origin.y / self.editImage.size.height * self.scrollView.contentSize.height
         self.scrollView.contentOffset = CGPoint(x: -self.scrollView.contentInset.left+diffX, y: -self.scrollView.contentInset.top+diffY)
+        
+        print("aaaa, scrollView.frame:   \(scrollView.frame),    scrollView.contentOffset: \(scrollView.contentOffset),  scrollView.contentSize:    \(scrollView.contentSize) \n\n\n" )
     }
     
     func changeClipBoxFrame(newFrame: CGRect) {
